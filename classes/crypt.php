@@ -15,8 +15,8 @@ namespace Fuel\Core;
 use \phpseclib3\Crypt\AES;
 use \phpseclib3\Crypt\Hash;
 
-use \ParagonIE\Fuel\Binary;
-use \ParagonIE\Fuel\Base64UrlSafe;
+use \ParagonIE\ConstantTime\Binary;
+use \ParagonIE\ConstantTime\Base64UrlSafe;
 
 /**
  * Sodium encryption/decryption code based on HaLite from ParagonIE
@@ -373,7 +373,7 @@ class Crypt
 		}
 
 		$calc = sodium_crypto_generichash($message, $auth_key, SODIUM_CRYPTO_GENERICHASH_BYTES_MAX);
-		$res = Binary::hashEquals($mac, $calc);
+		$res = hash_equals($mac, $calc);
 		static::memzero($calc);
 
 		return $res;
