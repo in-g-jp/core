@@ -495,6 +495,11 @@ class Database_PDO_Connection extends \Database_Connection
 	 */
 	protected function driver_commit()
 	{
+		// 既にトランザクションが終了済みのケースに対応
+		if ( ! $this->_connection->inTransaction())
+		{
+			return true;
+		}
 		return $this->_connection->commit();
 	}
 
@@ -504,6 +509,11 @@ class Database_PDO_Connection extends \Database_Connection
 	 */
 	protected function driver_rollback()
 	{
+		// 既にトランザクションが終了済みのケースに対応
+		if ( ! $this->_connection->inTransaction())
+		{
+			return true;
+		}
 		return $this->_connection->rollBack();
 	}
 
