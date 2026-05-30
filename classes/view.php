@@ -579,7 +579,7 @@ class View
 				$this->set($name, $value, $filter);
 			}
 		}
-		else
+		elseif ($key !== null)
 		{
 			if ($filter !== null)
 			{
