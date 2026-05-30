@@ -98,6 +98,12 @@ set_exception_handler(function ($e)
 
 set_error_handler(function ($severity, $message, $filepath, $line)
 {
+	// honor the @ error suppression operator
+	if ( ! (error_reporting() & $severity))
+	{
+		return false;
+	}
+
 	// reset the autoloader
 	\Autoloader::_reset();
 
