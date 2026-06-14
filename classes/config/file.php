@@ -102,7 +102,7 @@ abstract class Config_File implements Config_Interface
 		{
 			foreach ($this->vars as $i => $v)
 			{
-				$replacements['#^('.preg_quote($v).'){1}(.*)?#'] = "%".$i."%$2";
+				$replacements['#^('.preg_quote((string) $v).'){1}(.*)?#'] = "%".$i."%$2";
 			}
 		}
 
@@ -166,13 +166,13 @@ abstract class Config_File implements Config_Interface
 
 		if ( ! $path = \Finder::search('config', $this->file, $this->ext))
 		{
-			if ($pos = strripos($this->file, '::'))
+			if ($pos = strripos((string) $this->file, '::'))
 			{
 				// get the namespace path
-				if ($path = \Autoloader::namespace_path('\\'.ucfirst(substr($this->file, 0, $pos))))
+				if ($path = \Autoloader::namespace_path('\\'.ucfirst(substr((string) $this->file, 0, $pos))))
 				{
 					// strip the namespace from the filename
-					$this->file = substr($this->file, $pos+2);
+					$this->file = substr((string) $this->file, $pos+2);
 
 					// strip the classes directory as we need the module root
 					$path = substr($path, 0, -8).'config'.DS.$this->file.$this->ext;

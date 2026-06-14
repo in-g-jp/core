@@ -73,7 +73,7 @@ abstract class Database_Connection
 			}
 
 			// Set the driver class name
-			$driver = '\\Database_' . ucfirst($config['type']) . '_Connection';
+			$driver = '\\Database_' . ucfirst((string) $config['type']) . '_Connection';
 
 			// Create the database connection instance
 			static::$instances[$name] = new $driver($name, $config);
@@ -376,16 +376,16 @@ abstract class Database_Connection
 				$sql = preg_replace('/\sLIMIT\s+[^a-z\)]+/i', ' ', $sql);
 			}
 
-			if (stripos($sql, 'OFFSET') !== false)
+			if (stripos((string) $sql, 'OFFSET') !== false)
 			{
 				// Remove OFFSET from the SQL
-				$sql = preg_replace('/\sOFFSET\s+\d+/i', '', $sql);
+				$sql = preg_replace('/\sOFFSET\s+\d+/i', '', (string) $sql);
 			}
 
-			if (stripos($sql, 'ORDER BY') !== false)
+			if (stripos((string) $sql, 'ORDER BY') !== false)
 			{
 				// Remove ORDER BY clauses from the SQL to improve count query performance
-				$sql = preg_replace('/ORDER BY (.+?)(?=LIMIT|GROUP BY|PROCEDURE|INTO|FOR|LOCK|\)|$)/mi', '', $sql);
+				$sql = preg_replace('/ORDER BY (.+?)(?=LIMIT|GROUP BY|PROCEDURE|INTO|FOR|LOCK|\)|$)/mi', '', (string) $sql);
 			}
 
 			// Get the total rows from the last query executed
@@ -840,17 +840,17 @@ abstract class Database_Connection
 			return $this->quote_identifier($value).' AS '.$this->quote_identifier($alias);
 		}
 
-		if (preg_match('/^(["\']).*\1$/m', $value))
+		if (preg_match('/^(["\']).*\1$/m', (string) $value))
 		{
 			return $value;
 		}
 
-		if (strpos($value, '.') !== false)
+		if (strpos((string) $value, '.') !== false)
 		{
 			// Split the identifier into the individual parts
 			// This is slightly broken, because a table or column name
 			// (or user-defined alias!) might legitimately contain a period.
-			$parts = explode('.', $value);
+			$parts = explode('.', (string) $value);
 
 			if ($prefix = $this->table_prefix())
 			{

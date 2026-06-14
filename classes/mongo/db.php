@@ -585,7 +585,7 @@ class Mongo_Db
 	{
 		foreach ($fields as $col => $val)
 		{
-			if ($val == -1 or $val === false or strtolower($val) == 'desc')
+			if ($val == -1 or $val === false or strtolower((string) $val) == 'desc')
 			{
 				$this->sorts[$col] = -1;
 			}
@@ -1103,7 +1103,7 @@ class Mongo_Db
 
 		foreach ($keys as $col => $val)
 		{
-			if($val == -1 or $val === false or strtolower($val) == 'desc')
+			if($val == -1 or $val === false or strtolower((string) $val) == 'desc')
 			{
 				$keys[$col] = -1;
 			}

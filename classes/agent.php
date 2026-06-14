@@ -169,7 +169,7 @@ class Agent
 			{
 				static::$config['browscap']['method'] = static::$defaults['browscap']['method'];
 			}
-			static::$config['browscap']['method'] = strtolower(static::$config['browscap']['method']);
+			static::$config['browscap']['method'] = strtolower((string) static::$config['browscap']['method']);
 		}
 
 		// validate the cache configuration
@@ -259,7 +259,7 @@ class Agent
 	 */
 	public static function property($property = null)
 	{
-		$property = strtolower($property);
+		$property = strtolower((string) $property);
 		return array_key_exists($property, static::$properties) ? static::$properties[$property] : null;
 	}
 
@@ -334,7 +334,7 @@ class Agent
 	 */
 	public static function languages()
 	{
-		return explode(',', preg_replace('/(;q=[0-9\.]+)/i', '', strtolower(trim(\Input::server('http_accept_language', '')))));
+		return explode(',', (string) preg_replace('/(;q=[0-9\.]+)/i', '', strtolower(trim(\Input::server('http_accept_language', '')))));
 	}
 
 	// --------------------------------------------------------------------
@@ -346,7 +346,7 @@ class Agent
 	 */
 	public static function charsets()
 	{
-		return explode(',', preg_replace('/(;q=.+)/i', '', strtolower(trim(\Input::server('http_accept_charset', '')))));
+		return explode(',', (string) preg_replace('/(;q=.+)/i', '', strtolower(trim(\Input::server('http_accept_charset', '')))));
 	}
 
 	// --------------------------------------------------------------------
@@ -381,7 +381,7 @@ class Agent
 		// find a match for the user agent string
 		foreach($browscap as $browser => $properties)
 		{
-			$pattern = '@^'.str_replace($search, $replace, preg_quote($browser, '@')).'$@i';
+			$pattern = '@^'.str_replace($search, $replace, preg_quote((string) $browser, '@')).'$@i';
 			if (preg_match($pattern, static::$user_agent))
 			{
 				// store the browser name
@@ -582,7 +582,7 @@ class Agent
 		}
 
 		// parse the downloaded data
-		$browsers = @parse_ini_string($data, true, INI_SCANNER_RAW) or $browsers = array();
+		$browsers = @parse_ini_string((string) $data, true, INI_SCANNER_RAW) or $browsers = array();
 
 		// remove the version and timestamp entry
 		array_shift($browsers);
@@ -632,7 +632,7 @@ class Agent
 				}
 				else
 				{
-					if (array_key_exists($properties['Parent'], $index))
+					if (array_key_exists((string) $properties['Parent'], $index))
 					{
 						$properties['Parent'] = $index[$properties['Parent']];
 					}

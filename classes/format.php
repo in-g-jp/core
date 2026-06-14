@@ -169,7 +169,7 @@ class Format
 		foreach ($data as $key => $value)
 		{
 			// replace anything not alpha numeric
-			$key = preg_replace('/[^a-z_\-0-9]/i', '', $key);
+			$key = preg_replace('/[^a-z_\-0-9]/i', '', (string) $key);
 
 			// no numeric keys in our xml please!
 			if (is_numeric($key))
@@ -208,7 +208,7 @@ class Format
 			else
 			{
 				// add single node.
-				$encoded = htmlspecialchars(html_entity_decode($value, ENT_QUOTES, 'UTF-8'), ENT_QUOTES, "UTF-8");
+				$encoded = htmlspecialchars(html_entity_decode((string) $value, ENT_QUOTES, 'UTF-8'), ENT_QUOTES, "UTF-8");
 
 				if ($use_cdata and ($encoded !== (string) $value))
 				{

@@ -30,7 +30,7 @@ class Database_SQLite_Schema extends \Database_Schema
 			$result = $this->_connection->query(\DB::SELECT, $sql, false);
 			foreach ($result as $row)
 			{
-				if ($row['name'] == $database or strtolower($row['file']) == strtolower($database))
+				if ($row['name'] == $database or strtolower((string) $row['file']) == strtolower((string) $database))
 				{
 					return true;
 				}

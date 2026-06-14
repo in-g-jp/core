@@ -235,7 +235,7 @@ class Validation
 	 */
 	public function get_message($rule)
 	{
-		if ( ! array_key_exists($rule, $this->error_messages))
+		if ( ! array_key_exists((string) $rule, $this->error_messages))
 		{
 			return false;
 		}
@@ -889,7 +889,7 @@ class Validation
 	 */
 	public function _validation_valid_ip($val, $flag = '')
 	{
-		switch (strtolower($flag))
+		switch (strtolower((string) $flag))
 		{
 			case 'ipv4':
 				$flag = FILTER_FLAG_IPV4;

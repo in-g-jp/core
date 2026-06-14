@@ -110,7 +110,7 @@ class Arr
 		}
 		else
 		{
-			$keys = explode('.', $key);
+			$keys = explode('.', (string) $key);
 
 			while (count($keys) > 1)
 			{
@@ -228,7 +228,7 @@ class Arr
 			return $return;
 		}
 
-		$key_parts = explode('.', $key);
+		$key_parts = explode('.', (string) $key);
 
 		if ( ! is_array($array) or ! array_key_exists($key_parts[0], $array))
 		{
@@ -423,9 +423,9 @@ class Arr
 
 		foreach ($array as $key => $value)
 		{
-			if (stripos($key, $glue) !== false)
+			if (stripos((string) $key, $glue) !== false)
 			{
-				$keys = explode($glue, $key);
+				$keys = explode($glue, (string) $key);
 				$temp =& $return;
 				while (count($keys) > 1)
 				{
@@ -465,11 +465,11 @@ class Arr
 		$return = array();
 		foreach ($array as $key => $val)
 		{
-			if (preg_match('/^'.$prefix.'/', $key))
+			if (preg_match('/^'.$prefix.'/', (string) $key))
 			{
 				if ($remove_prefix === true)
 				{
-					$key = preg_replace('/^'.$prefix.'/', '', $key);
+					$key = preg_replace('/^'.$prefix.'/', '', (string) $key);
 				}
 				$return[$key] = $val;
 			}
@@ -508,7 +508,7 @@ class Arr
 	{
 		foreach ($array as $key => $val)
 		{
-			if (preg_match('/^'.$prefix.'/', $key))
+			if (preg_match('/^'.$prefix.'/', (string) $key))
 			{
 				unset($array[$key]);
 			}
@@ -529,11 +529,11 @@ class Arr
 		$return = array();
 		foreach ($array as $key => $val)
 		{
-			if (preg_match('/'.$suffix.'$/', $key))
+			if (preg_match('/'.$suffix.'$/', (string) $key))
 			{
 				if ($remove_suffix === true)
 				{
-					$key = preg_replace('/'.$suffix.'$/', '', $key);
+					$key = preg_replace('/'.$suffix.'$/', '', (string) $key);
 				}
 				$return[$key] = $val;
 			}
@@ -552,7 +552,7 @@ class Arr
 	{
 		foreach ($array as $key => $val)
 		{
-			if (preg_match('/'.$suffix.'$/', $key))
+			if (preg_match('/'.$suffix.'$/', (string) $key))
 			{
 				unset($array[$key]);
 			}
@@ -573,7 +573,7 @@ class Arr
 		$return = array();
 		foreach ($keys as $key)
 		{
-			if (array_key_exists($key, $array))
+			if (array_key_exists((string) $key, $array))
 			{
 				$remove or $return[$key] = $array[$key];
 				if($remove)

@@ -85,8 +85,8 @@ class Unzip
 		$file_locations = array();
 		foreach ($files as $file => $trash)
 		{
-			$dirname = pathinfo($file, PATHINFO_DIRNAME);
-			$extension = pathinfo($file, PATHINFO_EXTENSION);
+			$dirname = pathinfo((string) $file, PATHINFO_DIRNAME);
+			$extension = pathinfo((string) $file, PATHINFO_EXTENSION);
 
 			$folders = explode('/', $dirname);
 			$out_dn = $this->_target_dir . '/' . $dirname;
@@ -138,12 +138,12 @@ class Unzip
 				}
 			}
 
-			if (substr($file, -1, 1) == '/')
+			if (substr((string) $file, -1, 1) == '/')
 			{
 				continue;
 			}
 
-			$file_location = $this->_target_dir . '/' . ($preserve_filepath ? $file : basename($file));
+			$file_location = $this->_target_dir . '/' . ($preserve_filepath ? $file : basename((string) $file));
 			$file_location = realpath(dirname($file_location)) . '/' . basename($file_location);
 
 			if ($file_location and strpos($file_location, $this->_target_dir) === 0)
@@ -518,7 +518,7 @@ class Unzip
 						$this->compressed_list[$filename]['extra_field'] = $i['extra_field'];
 						$this->compressed_list[$filename]['contents_start_offset'] = $i['contents_start_offset'];
 
-						if (strtolower($stop_on_file) == strtolower($filename))
+						if (strtolower((string) $stop_on_file) == strtolower((string) $filename))
 						{
 							break;
 						}
@@ -557,7 +557,7 @@ class Unzip
 			$this->compressed_list[$filename] = $details;
 			$return = true;
 
-			if (strtolower($stop_on_file) == strtolower($filename))
+			if (strtolower((string) $stop_on_file) == strtolower((string) $filename))
 			{
 				break;
 			}

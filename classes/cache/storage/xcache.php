@@ -60,7 +60,7 @@ class Cache_Storage_Xcache extends \Cache_Storage_Driver
 		foreach($dependencies as $dep)
 		{
 			// get the section name and identifier
-			$sections = explode('.', $dep);
+			$sections = explode('.', (string) $dep);
 			if (count($sections) > 1)
 			{
 				$identifier = array_pop($sections);
@@ -121,7 +121,7 @@ class Cache_Storage_Xcache extends \Cache_Storage_Driver
 			$dirs = array();
 			foreach ($index as $dir)
 			{
-				if (strpos($dir, $section) === 0)
+				if (strpos((string) $dir, $section) === 0)
 				{
 					$dirs[] = $dir;
 					$list = xcache_get($dir);

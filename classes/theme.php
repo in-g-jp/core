@@ -933,7 +933,7 @@ class Theme
 		if ( ! isset($theme['asset_base']))
 		{
 			// determine the asset location and base URL
-			$assets_folder = rtrim($this->config['assets_folder'], DS).'/';
+			$assets_folder = rtrim((string) $this->config['assets_folder'], DS).'/';
 
 			// all theme files are inside the docroot
 			if (strpos($path, DOCROOT) === 0 and is_dir($path.$assets_folder))

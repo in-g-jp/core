@@ -562,7 +562,7 @@ class Date
 				return floor($timestamp->format('Y') / 100);
 			},
 			'%g' => function ($timestamp) {
-				return substr($timestamp->format('o'), -2);
+				return substr((string) $timestamp->format('o'), -2);
 			},
 			'%G' => 'o',
 			'%y' => 'y',
@@ -641,19 +641,19 @@ class Date
 			$match = false;
 			foreach (static::$replacements as $old => $new)
 			{
-				if (strpos($format, $old) === 0)
+				if (strpos((string) $format, (string) $old) === 0)
 				{
 					$new_format .= $new;
-					$format = substr($format, strlen($old));
+					$format = substr((string) $format, strlen((string) $old));
 					$match = true;
 					break;
 				}
 			}
 			if ( ! $match)
 			{
-				$char = substr($format, 0, 1);
+				$char = substr((string) $format, 0, 1);
 				$new_format .= ctype_alpha($char) ? "\\".$char : $char;
-				$format = substr($format, 1);
+				$format = substr((string) $format, 1);
 			}
 		}
 		return $new_format;

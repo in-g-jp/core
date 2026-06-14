@@ -213,14 +213,14 @@ class Cache_Storage_File extends \Cache_Storage_Driver
 	 */
 	protected function unprep_contents($payload)
 	{
-		$properties_end = strpos($payload, '{{/'.self::PROPS_TAG.'}}');
+		$properties_end = strpos((string) $payload, '{{/'.self::PROPS_TAG.'}}');
 		if ($properties_end === false)
 		{
 			throw new \UnexpectedValueException('Cache has bad formatting');
 		}
 
-		$this->contents = substr($payload, $properties_end + strlen('{{/'.self::PROPS_TAG.'}}'));
-		$props = substr(substr($payload, 0, $properties_end), strlen('{{'.self::PROPS_TAG.'}}'));
+		$this->contents = substr((string) $payload, $properties_end + strlen('{{/'.self::PROPS_TAG.'}}'));
+		$props = substr(substr((string) $payload, 0, $properties_end), strlen('{{'.self::PROPS_TAG.'}}'));
 		$props = json_decode($props, true);
 		if ($props === null)
 		{

@@ -139,7 +139,7 @@ class Database_Sqlsrv_Connection extends \Database_PDO_Connection
 			// deal with defaults syntax
 			if ($column['default'])
 			{
-				if (preg_match('~^\([\(\'](.*)[\'\)]\)$~', $column['default'], $matches))
+				if (preg_match('~^\([\(\'](.*)[\'\)]\)$~', (string) $column['default'], $matches))
 				{
 					$column['default'] = $matches[1];
 				}
@@ -268,17 +268,17 @@ class Database_Sqlsrv_Connection extends \Database_PDO_Connection
 			return $this->quote_identifier($value).' AS '.$this->quote_identifier($alias);
 		}
 
-		if (preg_match('/^(["\']).*\1$/m', $value))
+		if (preg_match('/^(["\']).*\1$/m', (string) $value))
 		{
 			return $value;
 		}
 
-		if (strpos($value, '.') !== false)
+		if (strpos((string) $value, '.') !== false)
 		{
 			// Split the identifier into the individual parts
 			// This is slightly broken, because a table or column name
 			// (or user-defined alias!) might legitimately contain a period.
-			$parts = explode('.', $value);
+			$parts = explode('.', (string) $value);
 
 			if ($prefix = $this->table_prefix())
 			{

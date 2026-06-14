@@ -81,7 +81,7 @@ class Cli
 		}
 		for ($i = 1; $i < $_SERVER['argc']; $i++)
 		{
-			$arg = explode('=', $_SERVER['argv'][$i]);
+			$arg = explode('=', (string) $_SERVER['argv'][$i]);
 
 			static::$args[$i] = $arg[0];
 

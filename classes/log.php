@@ -133,9 +133,9 @@ class Log
 	 */
 	public static function logfile($prefix = '', $suffix = '')
 	{
-		$ext = pathinfo(static::$filename, PATHINFO_EXTENSION);
-		$path = dirname(static::$filename);
-		$file = pathinfo(static::$filename, PATHINFO_FILENAME);
+		$ext = pathinfo((string) static::$filename, PATHINFO_EXTENSION);
+		$path = dirname((string) static::$filename);
+		$file = pathinfo((string) static::$filename, PATHINFO_FILENAME);
 		return static::$path.$path.DS.$prefix.$file.$suffix.($ext?('.'.$ext):'');
 	}
 

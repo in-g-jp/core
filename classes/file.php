@@ -157,7 +157,7 @@ class File
 
 		$file = static::open_file(@fopen($new_file, 'c'), true, $area);
 		ftruncate($file, 0);
-		fwrite($file, $contents);
+		fwrite($file, (string) $contents);
 		static::close_file($file, $area);
 
 		return true;
@@ -178,7 +178,7 @@ class File
 	public static function create_dir($basepath, $name, $chmod = null, $area = null)
 	{
 		$path	 = rtrim(static::instance($area)->get_path($basepath), '\\/').DS;
-		$new_dir = static::instance($area)->get_path($path.trim($name, '\\/'));
+		$new_dir = static::instance($area)->get_path($path.trim((string) $name, '\\/'));
 		is_null($chmod) and $chmod = \Config::get('file.chmod.folders', 0777);
 
 		if ( ! is_dir($path) or ! is_writable($path))
@@ -338,8 +338,8 @@ class File
 						}
 					}
 
-					$not = substr($f, 0, 1) === '!';  // whether it's a negative condition
-					$f = $not ? substr($f, 1) : $f;
+					$not = substr((string) $f, 0, 1) === '!';  // whether it's a negative condition
+					$f = $not ? substr((string) $f, 1) : $f;
 					// on negative condition a match leads to a continue
 					if (($match = preg_match('/'.$f.'/uiD', $file) > 0) and $not)
 					{
@@ -411,7 +411,7 @@ class File
 			throw new \FileAccessException('No write access to: "'.$basepath.'", cannot update a file.');
 		}
 
-		fwrite($file, $contents);
+		fwrite($file, (string) $contents);
 		static::close_file($file, $area);
 
 		return true;
@@ -449,7 +449,7 @@ class File
 			throw new \FileAccessException('No write access, cannot append to the file: "'.$file.'".');
 		}
 
-		fwrite($file, $contents);
+		fwrite($file, (string) $contents);
 		static::close_file($file, $area);
 
 		return true;
@@ -643,7 +643,7 @@ class File
 		{
 			if (is_array($file))
 			{
-				$check = static::create_dir($new_path.DS, substr($dir, 0, -1), fileperms($path.$dir) ?: 0777, $target_area);
+				$check = static::create_dir($new_path.DS, substr((string) $dir, 0, -1), fileperms($path.$dir) ?: 0777, $target_area);
 				$check and static::rename_dir($path.$dir.DS, $new_path.$dir, $source_area, $target_area);
 			}
 			else
@@ -746,7 +746,7 @@ class File
 		{
 			if (is_array($file))
 			{
-				$check = static::create_dir($new_path.DS, substr($dir, 0, -1), fileperms($path.$dir) ?: 0777, $target_area);
+				$check = static::create_dir($new_path.DS, substr((string) $dir, 0, -1), fileperms($path.$dir) ?: 0777, $target_area);
 				$check and static::copy_dir($path.$dir.DS, $new_path.$dir, $source_area, $target_area);
 			}
 			else

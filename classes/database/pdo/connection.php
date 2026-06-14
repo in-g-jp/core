@@ -323,7 +323,7 @@ class Database_PDO_Connection extends \Database_Connection
 		foreach ($result as $row)
 		{
 			// use like as a filter if given
-			if (isset($like) and ! preg_match('#'.$like.'#', $row['Field']))
+			if (isset($like) and ! preg_match('#'.$like.'#', (string) $row['Field']))
 			{
 				continue;
 			}
@@ -371,7 +371,7 @@ class Database_PDO_Connection extends \Database_Connection
 						case 'enum':
 						case 'set':
 							$column['collation_name'] = isset($row['Collation']) ? $row['Collation'] : null;
-							$column['options'] = explode('\',\'', substr($length, 1, - 1));
+							$column['options'] = explode('\',\'', substr((string) $length, 1, - 1));
 							break;
 					}
 					break;

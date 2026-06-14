@@ -50,7 +50,7 @@ function htmLawed($t, $C=1, $S=array())
   if (!empty($C['safe'])) {
     unset($eleAr['applet'], $eleAr['audio'], $eleAr['canvas'], $eleAr['dialog'], $eleAr['embed'], $eleAr['iframe'], $eleAr['object'], $eleAr['script'], $eleAr['video']);
   }
-  $x = !empty($C['elements']) ? str_replace(array("\n", "\r", "\t", ' '), '', strtolower($C['elements'])) : '*';
+  $x = !empty($C['elements']) ? str_replace(array("\n", "\r", "\t", ' '), '', strtolower((string) $C['elements'])) : '*';
   if ($x == '-*') {
     $eleAr = array();
   } elseif (strpos($x, '*') === false) {
@@ -66,7 +66,7 @@ function htmLawed($t, $C=1, $S=array())
             },
             $x);
       }
-      preg_match_all('`(?:^|-|\+)[^\-+]+?(?=-|\+|$)`', $x, $m, PREG_SET_ORDER);
+      preg_match_all('`(?:^|-|\+)[^\-+]+?(?=-|\+|$)`', (string) $x, $m, PREG_SET_ORDER);
       for ($i=count($m); --$i>=0;) {
         $m[$i] = $m[$i][0];
       }
@@ -88,7 +88,7 @@ function htmLawed($t, $C=1, $S=array())
 
   // -- Configure for attributes.
 
-  $x = !empty($C['deny_attribute']) ? strtolower(preg_replace('"\s+-"', '/', trim($C['deny_attribute']))) : '';
+  $x = !empty($C['deny_attribute']) ? strtolower((string) preg_replace('"\s+-"', '/', trim((string) $C['deny_attribute']))) : '';
   $x = str_replace(array(' ', "\t", "\r", "\n"), '', $x);
   $x =
     array_flip(
@@ -98,14 +98,14 @@ function htmLawed($t, $C=1, $S=array())
            '-'. '\\0',
            explode(
              '/',
-             (!empty($C['safe']) ? preg_replace('`/on[^/]+`', '', $x) : $x)))
+             ((string) !empty($C['safe']) ? preg_replace('`/on[^/]+`', '', $x) : $x)))
        : array_filter(explode(',', $x. (!empty($C['safe']) ? ',on*' : ''))));
   $C['deny_attribute'] = $x;
 
   // -- Configure URL handling.
 
-  $x = (isset($C['schemes'][2]) && strpos($C['schemes'], ':')
-        ? strtolower($C['schemes'])
+  $x = (isset($C['schemes'][2]) && strpos((string) $C['schemes'], ':')
+        ? strtolower((string) $C['schemes'])
         : ('href: aim, feed, file, ftp, gopher, http, https, irc, mailto, news, nntp, sftp, ssh, tel, telnet, ws, wss'
            . (empty($C['safe'])
               ? ', app, javascript; *: data, javascript, '
@@ -128,7 +128,7 @@ function htmLawed($t, $C=1, $S=array())
     $C['schemes']['style'] = array('!'=>1);
   }
   $C['abs_url'] = isset($C['abs_url']) ? $C['abs_url'] : 0;
-  if (!isset($C['base_url']) || !preg_match('`^[a-zA-Z\d.+\-]+://[^/]+/(.+?/)?$`', $C['base_url'])) {
+  if (!isset($C['base_url']) || !preg_match('`^[a-zA-Z\d.+\-]+://[^/]+/(.+?/)?$`', (string) $C['base_url'])) {
     $C['base_url'] = $C['abs_url'] = 0;
   }
 
@@ -161,11 +161,11 @@ function htmLawed($t, $C=1, $S=array())
   $C['make_tag_strict'] = isset($C['make_tag_strict']) ? $C['make_tag_strict'] : 1;
   $C['named_entity'] = isset($C['named_entity']) ? (bool)$C['named_entity'] : 1;
   $C['no_deprecated_attr'] = isset($C['no_deprecated_attr']) ? $C['no_deprecated_attr'] : 1;
-  $C['parent'] = isset($C['parent'][0]) ? strtolower($C['parent']) : 'body';
+  $C['parent'] = isset($C['parent'][0]) ? strtolower((string) $C['parent']) : 'body';
   $C['show_setting'] = !empty($C['show_setting']) ? $C['show_setting'] : 0;
   $C['style_pass'] = empty($C['style_pass']) ? 0 : 1;
   $C['tidy'] = empty($C['tidy']) ? 0 : $C['tidy'];
-  $C['unique_ids'] = isset($C['unique_ids']) && (!preg_match('`\W`', $C['unique_ids'])) ? $C['unique_ids'] : 1;
+  $C['unique_ids'] = isset($C['unique_ids']) && (!preg_match('`\W`', (string) $C['unique_ids'])) ? $C['unique_ids'] : 1;
   $C['xml:lang'] = isset($C['xml:lang']) ? $C['xml:lang'] : 0;
 
   if (isset($GLOBALS['C'])) {
@@ -183,7 +183,7 @@ function htmLawed($t, $C=1, $S=array())
 
   // Handle characters.
 
-  $t = preg_replace('`[\x00-\x08\x0b-\x0c\x0e-\x1f]`', '', $t); // Remove illegal
+  $t = preg_replace('`[\x00-\x08\x0b-\x0c\x0e-\x1f]`', '', (string) $t); // Remove illegal
   if ($C['clean_ms_char']) { // Convert MS Windows CP-1252
     $x = array("\x7f"=>'', "\x80"=>'&#8364;', "\x81"=>'', "\x83"=>'&#402;', "\x85"=>'&#8230;', "\x86"=>'&#8224;', "\x87"=>'&#8225;', "\x88"=>'&#710;', "\x89"=>'&#8240;', "\x8a"=>'&#352;', "\x8b"=>'&#8249;', "\x8c"=>'&#338;', "\x8d"=>'', "\x8e"=>'&#381;', "\x8f"=>'', "\x90"=>'', "\x95"=>'&#8226;', "\x96"=>'&#8211;', "\x97"=>'&#8212;', "\x98"=>'&#732;', "\x99"=>'&#8482;', "\x9a"=>'&#353;', "\x9b"=>'&#8250;', "\x9c"=>'&#339;', "\x9d"=>'', "\x9e"=>'&#382;', "\x9f"=>'&#376;');
     $x = $x
@@ -213,16 +213,16 @@ function htmLawed($t, $C=1, $S=array())
 
   // Handle remaining text.
 
-  $t = preg_replace_callback('`<(?:(?:\s|$)|(?:[^>]*(?:>|$)))|>`m', 'hl_tag', $t);
+  $t = preg_replace_callback('`<(?:(?:\s|$)|(?:[^>]*(?:>|$)))|>`m', 'hl_tag', (string) $t);
   $t = $C['balance'] ? hl_balance($t, $C['keep_bad'], $C['parent']) : $t;
-  $t = (($C['cdata'] || $C['comment']) && strpos($t, "\x01") !== false)
+  $t = (($C['cdata'] || $C['comment']) && strpos((string) $t, "\x01") !== false)
        ? str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05"), array('', '', '&', '<', '>'), $t)
        : $t;
   $t = $C['tidy'] ? hl_tidy($t, $C['tidy'], $C['parent']) : $t;
 
   // Cleanup.
 
-  if ($C['show_setting'] && preg_match('`^[a-z][a-z0-9_]*$`i', $C['show_setting'])) {
+  if ($C['show_setting'] && preg_match('`^[a-z][a-z0-9_]*$`i', (string) $C['show_setting'])) {
     $GLOBALS[$C['show_setting']] = array('config'=>$C, 'spec'=>$S, 'time'=>microtime(true), 'version'=>hl_version());
   }
   unset($C, $eleAr);
@@ -283,10 +283,10 @@ function hl_attributeValue($attr, $value, $ruleAr, $ele)
         break; case 'nomatch': if (preg_match($ruleVal, $v)) {
           $ok = 0;
         }
-        break; case 'oneof': if(!in_array($v, explode('|', $ruleVal))) {
+        break; case 'oneof': if(!in_array($v, explode('|', (string) $ruleVal))) {
           $ok = 0;
         }
-        break; case 'noneof': if(in_array($v, explode('|', $ruleVal))) {
+        break; case 'noneof': if(in_array($v, explode('|', (string) $ruleVal))) {
           $ok = 0;
         }
         break; default:
@@ -378,7 +378,7 @@ function hl_balance($t, $act=1, $parentEle='div')
 
   // Loop over elements.
 
-  $t = explode('<', $t);
+  $t = explode('<', (string) $t);
   $validKidsOfMom = $openEleQueue = array(); // Queue of opened elements
   ob_start();
   for ($i=-1, $eleCount=count($t); ++$i<$eleCount;) {
@@ -667,11 +667,11 @@ function hl_commentCdata($t)
     return '';
   }
   if ($type == 'comment') {
-    if (substr(($t = preg_replace('`--+`', '-', substr($t, 4, -3))), -1) != ' ') {
+    if (substr(((string) $t = preg_replace('`--+`', '-', substr((string) $t, 4, -3))), -1) != ' ') {
       $t .= $rule == 4 ? '' : ' ';
     }
   } else {
-    $t = substr($t, 1, -1);
+    $t = substr((string) $t, 1, -1);
   }
   $t = $rule == 2 ? str_replace(array('&', '<', '>'), array('&amp;', '&lt;', '&gt;'), $t) : $t;
   return
@@ -781,7 +781,7 @@ function hl_entity($t)
       . ';';
   }
   if (
-    ($n = ctype_digit($t = substr($t, 1)) ? intval($t) : hexdec(substr($t, 1))) < 9
+    ($n = ctype_digit($t = substr((string) $t, 1)) ? intval($t) : hexdec(substr($t, 1))) < 9
     || ($n > 13 && $n < 32)
     || $n == 11
     || $n == 12
@@ -966,7 +966,7 @@ function hl_tag($t)
   if ($t == '>') {
     return '&gt;';
   }
-  if (!preg_match('`^<(/?)([a-zA-Z][^\s>]*)([^>]*?)\s?>$`m', $t, $m)) { // Get tag with element name and attributes
+  if (!preg_match('`^<(/?)([a-zA-Z][^\s>]*)([^>]*?)\s?>$`m', (string) $t, $m)) { // Get tag with element name and attributes
     return str_replace(array('<', '>'), array('&lt;', '&gt;'), $t);
   }
 
@@ -1071,13 +1071,13 @@ function hl_tag($t)
   if (strpos($attrStr, "\x01") !== false) { // Remove CDATA/comment
     $attrStr = preg_replace('`\x01[^\x01]*\x01`', '', $attrStr);
   }
-  $attrStr = trim($attrStr, ' /');
+  $attrStr = trim((string) $attrStr, ' /');
   $attrAr = array();
   $state = 0;
-  while (strlen($attrStr)) {
+  while (strlen((string) $attrStr)) {
     $ok = 0; // For parsing errors, to deal with space, ", and ' characters
     switch ($state) {
-      case 0: if (preg_match('`^[^=\s/\x7f-\x9f]+`', $attrStr, $m)) { // Name
+      case 0: if (preg_match('`^[^=\s/\x7f-\x9f]+`', (string) $attrStr, $m)) { // Name
         $attr = strtolower($m[0]);
         $ok = $state = 1;
         $attrStr = ltrim(substr_replace($attrStr, '', 0, strlen($m[0])));
@@ -1085,14 +1085,14 @@ function hl_tag($t)
       break; case 1: if ($attrStr[0] == '=') {
         $ok = 1;
         $state = 2;
-        $attrStr = ltrim($attrStr, '= ');
+        $attrStr = ltrim((string) $attrStr, '= ');
       } else { // No value
         $ok = 1;
         $state = 0;
-        $attrStr = ltrim($attrStr);
+        $attrStr = ltrim((string) $attrStr);
         $attrAr[$attr] = '';
       }
-      break; case 2: if (preg_match('`^((?:"[^"]*")|(?:\'[^\']*\')|(?:\s*[^\s"\']+))(.*)`', $attrStr, $m)) { // Value
+      break; case 2: if (preg_match('`^((?:"[^"]*")|(?:\'[^\']*\')|(?:\s*[^\s"\']+))(.*)`', (string) $attrStr, $m)) { // Value
         $attrStr = ltrim($m[2]);
         $m = $m[1];
         $ok = 1;
@@ -1107,7 +1107,7 @@ function hl_tag($t)
       break;
     }
     if (!$ok) {
-      $attrStr = preg_replace('`^(?:"[^"]*("|$)|\'[^\']*(\'|$)|\S)*\s*`', '', $attrStr);
+      $attrStr = preg_replace('`^(?:"[^"]*("|$)|\'[^\']*(\'|$)|\S)*\s*`', '', (string) $attrStr);
       $state = 0;
     }
   }
@@ -1132,9 +1132,9 @@ function hl_tag($t)
 
       ((isset($attrEleAr[$attr][$ele])
         || isset($globalAttrAr[$attr])
-        || preg_match('`data-((?!xml)[^:]+$)`', $attr)
+        || preg_match('`data-((?!xml)[^:]+$)`', (string) $attr)
         || (strpos($ele, '-')
-            && strpos($attr, 'data-xml') !== 0))
+            && strpos((string) $attr, 'data-xml') !== 0))
 
        // .... No denial through $spec.
 
@@ -1142,23 +1142,23 @@ function hl_tag($t)
            || (!isset($eleSpec['deny'])
                || (!isset($eleSpec['deny']['*'])
                    && !isset($eleSpec['deny'][$attr])
-                   && !isset($eleSpec['deny'][preg_replace('`^(on|aria|data).+`', '\\1', $attr). '*']))))
+                   && !isset($eleSpec['deny'][preg_replace('`^(on|aria|data).+`', '\\1', (string) $attr). '*']))))
 
        // .... No denial through $config.
 
        && (empty($deniedAttrAr)
            || (isset($deniedAttrAr['*'])
                ? (isset($deniedAttrAr["-$attr"])
-                  || isset($deniedAttrAr['-'. preg_replace('`^(on|aria|data)..+`', '\\1', $attr). '*']))
+                  || isset($deniedAttrAr['-'. preg_replace('`^(on|aria|data)..+`', '\\1', (string) $attr). '*']))
                : (!isset($deniedAttrAr[$attr])
-                  && !isset($deniedAttrAr[preg_replace('`^(on|aria|data).+`', '\\1', $attr). '*'])))))
+                  && !isset($deniedAttrAr[preg_replace('`^(on|aria|data).+`', '\\1', (string) $attr). '*'])))))
 
       // .... Permit if permission through $spec.
 
       || (!empty($eleSpec)
           && (isset($eleSpec[$attr])
               || (isset($globalAttrAr[$attr])
-                  && isset($eleSpec[preg_replace('`^(on|aria|data).+`', '\\1', $attr). '*']))))
+                  && isset($eleSpec[preg_replace('`^(on|aria|data).+`', '\\1', (string) $attr). '*']))))
       ) {
 
       // .. Attribute with no value or standard value.
@@ -1176,7 +1176,7 @@ function hl_tag($t)
       // .. URLs and CSS expressions in style attribute.
 
       if ($attr == 'style' && !$C['style_pass']) {
-        if (false !== strpos($v, '&#')) { // Change any entity to character
+        if (false !== strpos((string) $v, '&#')) { // Change any entity to character
           static $entityAr = array('&#32;'=>' ', '&#x20;'=>' ', '&#58;'=>':', '&#x3a;'=>':', '&#34;'=>'"', '&#x22;'=>'"', '&#40;'=>'(', '&#x28;'=>'(', '&#41;'=>')', '&#x29;'=>')', '&#42;'=>'*', '&#x2a;'=>'*', '&#47;'=>'/', '&#x2f;'=>'/', '&#92;'=>'\\', '&#x5c;'=>'\\', '&#101;'=>'e', '&#69;'=>'e', '&#x45;'=>'e', '&#x65;'=>'e', '&#105;'=>'i', '&#73;'=>'i', '&#x49;'=>'i', '&#x69;'=>'i', '&#108;'=>'l', '&#76;'=>'l', '&#x4c;'=>'l', '&#x6c;'=>'l', '&#110;'=>'n', '&#78;'=>'n', '&#x4e;'=>'n', '&#x6e;'=>'n', '&#111;'=>'o', '&#79;'=>'o', '&#x4f;'=>'o', '&#x6f;'=>'o', '&#112;'=>'p', '&#80;'=>'p', '&#x50;'=>'p', '&#x70;'=>'p', '&#114;'=>'r', '&#82;'=>'r', '&#x52;'=>'r', '&#x72;'=>'r', '&#115;'=>'s', '&#83;'=>'s', '&#x53;'=>'s', '&#x73;'=>'s', '&#117;'=>'u', '&#85;'=>'u', '&#x55;'=>'u', '&#x75;'=>'u', '&#120;'=>'x', '&#88;'=>'x', '&#x58;'=>'x', '&#x78;'=>'x', '&#39;'=>"'", '&#x27;'=>"'");
           $v = strtr($v, $entityAr);
         }
@@ -1184,17 +1184,17 @@ function hl_tag($t)
           preg_replace_callback(
             '`(url(?:\()(?: )*(?:\'|"|&(?:quot|apos);)?)(.+?)((?:\'|"|&(?:quot|apos);)?(?: )*(?:\)))`iS',
             'hl_url',
-            $v);
+            (string) $v);
         $v = !$C['css_expression']
-             ? preg_replace('`expression`i', ' ', preg_replace('`\\\\\S|(/|(%2f))(\*|(%2a))`i', ' ', $v))
+             ? preg_replace('`expression`i', ' ', (string) preg_replace('`\\\\\S|(/|(%2f))(\*|(%2a))`i', ' ', (string) $v))
              : $v;
 
       // .. URLs in other attributes.
 
-      } elseif (isset($urlAttrAr[$attr]) || (isset($globalAttrAr[$attr]) && strpos($attr, 'on') === 0)) {
+      } elseif (isset($urlAttrAr[$attr]) || (isset($globalAttrAr[$attr]) && strpos((string) $attr, 'on') === 0)) {
         $v =
           str_replace("­", ' ',
-            (strpos($v, '&') !== false  // ! Double-quoted character = soft-hyphen
+            (strpos((string) $v, '&') !== false  // ! Double-quoted character = soft-hyphen
              ? str_replace(array('&#xad;', '&#173;', '&shy;'), ' ', $v)
              : $v));
         if ($attr == 'srcset' || ($attr == 'archive' && $ele == 'applet')) {
@@ -1225,7 +1225,7 @@ function hl_tag($t)
 
         if ($attr == 'href') {
           if ($C['anti_mail_spam'] && strpos($v, 'mailto:') === 0) {
-            $v = str_replace('@', htmlspecialchars($C['anti_mail_spam']), $v);
+            $v = str_replace('@', htmlspecialchars((string) $C['anti_mail_spam']), $v);
           } elseif ($C['anti_link_spam']) {
             $x = $C['anti_link_spam'][1];
             if (!empty($x) && preg_match($x, $v)) {
@@ -1434,12 +1434,12 @@ function hl_tidy($t, $format, $parentEle)
     preg_replace(
       array('`(<\w[^>]*(?<!/)>)\s+`', '`\s+`', '`(<\w[^>]*(?<!/)>) `'),
       array(' $1', ' ', '$1'),
-      preg_replace_callback(
+      (string) preg_replace_callback(
         array('`(<(!\[CDATA\[))(.+?)(\]\]>)`sm', '`(<(!--))(.+?)(-->)`sm', '`(<(pre|script|textarea)[^>]*?>)(.+?)(</\2>)`sm'),
         'hl_aux2',
         $t));
 
-  if (($format = strtolower($format)) == -1) {
+  if (($format = strtolower((string) $format)) == -1) {
     return
       str_replace(array("\x01", "\x02", "\x03", "\x04", "\x05", "\x07"), array('<', '>', "\n", "\r", "\t", ' '), $t);
   }
@@ -1458,7 +1458,7 @@ function hl_tidy($t, $format, $parentEle)
   $prePostEleAr = array('address'=>1, 'article'=>1, 'aside'=>1, 'blockquote'=>1, 'center'=>1, 'colgroup'=>1, 'datalist'=>1, 'details'=>1, 'dialog'=>1, 'dir'=>1, 'div'=>1, 'dl'=>1, 'fieldset'=>1, 'figure'=>1, 'footer'=>1, 'form'=>1, 'header'=>1, 'hgroup'=>1, 'hr'=>1, 'iframe'=>1, 'main'=>1, 'map'=>1, 'menu'=>1, 'nav'=>1, 'noscript'=>1, 'ol'=>1, 'optgroup'=>1, 'picture'=>1, 'rbc'=>1, 'rtc'=>1, 'ruby'=>1, 'script'=>1, 'section'=>1, 'select'=>1, 'table'=>1, 'tbody'=>1, 'template'=>1, 'tfoot'=>1, 'thead'=>1, 'tr'=>1, 'ul'=>1); // Before and after opening and closing
 
   $doPad = 1;
-  $t = explode('<', $t);
+  $t = explode('<', (string) $t);
   while ($doPad) {
     $n = $leadN;
     $eleAr = $t;
@@ -1532,38 +1532,38 @@ function hl_url($url, $attr=null)
     $attr = 'style';
     $preUrl = $url[1];
     $postUrl = $url[3];
-    $url = trim($url[2]);
+    $url = trim((string) $url[2]);
   }
   $okSchemeAr = isset($C['schemes'][$attr]) ? $C['schemes'][$attr] : $C['schemes']['*'];
-  if (isset($okSchemeAr['!']) && substr($url, 0, 7) != $blocker) {
+  if (isset($okSchemeAr['!']) && substr((string) $url, 0, 7) != $blocker) {
     $url = "{$blocker}{$url}";
   }
   if (isset($okSchemeAr['*'])
-      || !strcspn($url, '#?;')
-      || substr($url, 0, strlen($blocker)) == $blocker
+      || !strcspn((string) $url, '#?;')
+      || substr((string) $url, 0, strlen((string) $blocker)) == $blocker
     ) {
     return "{$preUrl}{$url}{$postUrl}";
   }
-  if (preg_match('`^([^:?[@!$()*,=/\'\]]+?)(:|&(#(58|x3a)|colon);|%3a|\\\\0{0,4}3a).`i', $url, $m)
+  if (preg_match('`^([^:?[@!$()*,=/\'\]]+?)(:|&(#(58|x3a)|colon);|%3a|\\\\0{0,4}3a).`i', (string) $url, $m)
       && !isset($okSchemeAr[strtolower($m[1])]) // Special crafting suggests malice
     ) {
     return "{$preUrl}{$blocker}{$url}{$postUrl}";
   }
   if ($C['abs_url']) {
-    if ($C['abs_url'] == -1 && strpos($url, $C['base_url']) === 0) { // Make URL relative
-      $url = substr($url, strlen($C['base_url']));
+    if ($C['abs_url'] == -1 && strpos((string) $url, (string) $C['base_url']) === 0) { // Make URL relative
+      $url = substr((string) $url, strlen((string) $C['base_url']));
     } elseif (empty($m[1])) { // Make URL absolute
-      if (substr($url, 0, 2) == '//') {
-        $url = substr($C['base_url'], 0, strpos($C['base_url'], ':') + 1). $url;
+      if (substr((string) $url, 0, 2) == '//') {
+        $url = substr((string) $C['base_url'], 0, strpos((string) $C['base_url'], ':') + 1). $url;
       } elseif ($url[0] == '/') {
-        $url = preg_replace('`(^.+?://[^/]+)(.*)`', '$1', $C['base_url']). $url;
-      } elseif (strcspn($url, './')) {
+        $url = preg_replace('`(^.+?://[^/]+)(.*)`', '$1', (string) $C['base_url']). $url;
+      } elseif (strcspn((string) $url, './')) {
         $url = $C['base_url']. $url;
       } else {
-        preg_match('`^([a-zA-Z\d\-+.]+://[^/]+)(.*)`', $C['base_url'], $m);
+        preg_match('`^([a-zA-Z\d\-+.]+://[^/]+)(.*)`', (string) $C['base_url'], $m);
         $url = preg_replace('`(?<=/)\./`', '', $m[2]. $url);
-        while (preg_match('`(?<=/)([^/]{3,}|[^/.]+?|\.[^/.]|[^/.]\.)/\.\./`', $url)) {
-          $url = preg_replace('`(?<=/)([^/]{3,}|[^/.]+?|\.[^/.]|[^/.]\.)/\.\./`', '', $url);
+        while (preg_match('`(?<=/)([^/]{3,}|[^/.]+?|\.[^/.]|[^/.]\.)/\.\./`', (string) $url)) {
+          $url = preg_replace('`(?<=/)([^/]{3,}|[^/.]+?|\.[^/.]|[^/.]\.)/\.\./`', '', (string) $url);
         }
         $url = $m[1]. $url;
       }

@@ -115,7 +115,7 @@ class Form_Instance
 		}
 
 		// If not a full URL, create one
-		elseif ( ! strpos($attributes['action'], '://'))
+		elseif ( ! strpos((string) $attributes['action'], '://'))
 		{
 			$attributes['action'] = \Uri::create($attributes['action']);
 		}
@@ -590,7 +590,7 @@ class Form_Instance
 		}
 
 		// if it's a multiselect, make sure the name is an array
-		if (isset($attributes['multiple']) and substr($attributes['name'], -2) != '[]')
+		if (isset($attributes['multiple']) and substr((string) $attributes['name'], -2) != '[]')
 		{
 			$attributes['name'] .= '[]';
 		}

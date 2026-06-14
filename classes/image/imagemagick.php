@@ -189,7 +189,7 @@ class Image_Imagemagick extends \Image_Driver
 			}
 
 			$output = $this->exec('identify', "-format '%w %h' '".$filename."'[0]");
-			list($width, $height) = explode(" ", $output[0]);
+			list($width, $height) = explode(" ", (string) $output[0]);
 			$return = (object) array(
 				'width' => $width,
 				'height' => $height,
@@ -250,13 +250,13 @@ class Image_Imagemagick extends \Image_Driver
 		if(($filetype == 'jpeg' or $filetype == 'jpg') and $this->config['quality'] != 100)
 		{
 			$quality = "'".$this->config['quality']."%'";
-			$this->exec('convert', $image.' -auto-orient -quality '.$quality.' '.strtolower($filetype).':-', true);
+			$this->exec('convert', $image.' -auto-orient -quality '.$quality.' '.strtolower((string) $filetype).':-', true);
 		}
-		elseif (substr($this->image_temp, -1 * strlen($filetype)) != $filetype)
+		elseif (substr((string) $this->image_temp, -1 * strlen((string) $filetype)) != $filetype)
 		{
 			if ( ! $this->config['debug'])
 			{
-				$this->exec('convert', $image.' -auto-orient '.strtolower($filetype).':-', true);
+				$this->exec('convert', $image.' -auto-orient '.strtolower((string) $filetype).':-', true);
 			}
 		}
 		else

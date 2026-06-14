@@ -62,7 +62,7 @@ class Cache_Storage_Redis extends \Cache_Storage_Driver
 			}
 
 			// get the redis version
-			preg_match('/redis_version:(.*?)\n/', static::$redis->info(), $info);
+			preg_match('/redis_version:(.*?)\n/', (string) static::$redis->info(), $info);
 			if (version_compare(trim($info[1]), '1.2') < 0)
 			{
 				throw new \FuelException('Version 1.2 or higher of the Redis NoSQL engine is required to use the redis cache driver.');
@@ -83,7 +83,7 @@ class Cache_Storage_Redis extends \Cache_Storage_Driver
 		foreach($dependencies as $dep)
 		{
 			// get the section name and identifier
-			$sections = explode('.', $dep);
+			$sections = explode('.', (string) $dep);
 			if (count($sections) > 1)
 			{
 				$identifier = array_pop($sections);
@@ -152,7 +152,7 @@ class Cache_Storage_Redis extends \Cache_Storage_Driver
 				$dirs = array();
 				foreach ($index as $entry)
 				{
-					if ($entry == $section or strpos($entry, $section.'.') === 0)
+					if ($entry == $section or strpos((string) $entry, $section.'.') === 0)
 					{
 						$dirs[] = $entry;
 					}
@@ -232,14 +232,14 @@ class Cache_Storage_Redis extends \Cache_Storage_Driver
 	 */
 	protected function unprep_contents($payload)
 	{
-		$properties_end = strpos($payload, '{{/'.static::PROPS_TAG.'}}');
+		$properties_end = strpos((string) $payload, '{{/'.static::PROPS_TAG.'}}');
 		if ($properties_end === FALSE)
 		{
 			throw new \UnexpectedValueException('Cache has bad formatting');
 		}
 
-		$this->contents = substr($payload, $properties_end + strlen('{{/'.static::PROPS_TAG.'}}'));
-		$props = substr(substr($payload, 0, $properties_end), strlen('{{'.static::PROPS_TAG.'}}'));
+		$this->contents = substr((string) $payload, $properties_end + strlen('{{/'.static::PROPS_TAG.'}}'));
+		$props = substr(substr((string) $payload, 0, $properties_end), strlen('{{'.static::PROPS_TAG.'}}'));
 		$props = json_decode($props, true);
 		if ($props === NULL)
 		{
@@ -496,7 +496,7 @@ class Cache_Storage_Redis extends \Cache_Storage_Driver
 	 */
 	protected function _unserialize($data)
 	{
-		$data = @unserialize(stripslashes($data));
+		$data = @unserialize(stripslashes((string) $data));
 
 		if (is_array($data))
 		{

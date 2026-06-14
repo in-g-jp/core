@@ -136,9 +136,9 @@ abstract class Cache_Storage_Driver
 	public function __call($method, $args = array())
 	{
 		// Allow getting any properties set in static::$_gettable
-		if (substr($method, 0, 3) == 'get')
+		if (substr((string) $method, 0, 3) == 'get')
 		{
-			$name = substr($method, 4);
+			$name = substr((string) $method, 4);
 			if (in_array($name, static::$_gettable))
 			{
 				return $this->{$name};
@@ -149,9 +149,9 @@ abstract class Cache_Storage_Driver
 			}
 		}
 		// Allow setting any properties set in static::$_settable
-		elseif (substr($method, 0, 3) == 'set')
+		elseif (substr((string) $method, 0, 3) == 'set')
 		{
-			$name = substr($method, 4);
+			$name = substr((string) $method, 4);
 			if (in_array($name, static::$_settable))
 			{
 				$this->{$name} = @$args[0];
@@ -188,7 +188,7 @@ abstract class Cache_Storage_Driver
 		if (is_string($identifier) || is_int($identifier))
 		{
 			// cleanup to only allow alphanumeric chars, dashes, dots & underscores
-			if (preg_match('/^([a-z0-9_\.\-]*)$/iuD', $identifier) === 0)
+			if (preg_match('/^([a-z0-9_\.\-]*)$/iuD', (string) $identifier) === 0)
 			{
 				throw new \FuelException('Cache identifier can only contain alphanumeric characters, underscores, dashes & dots.');
 			}

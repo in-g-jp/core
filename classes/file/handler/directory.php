@@ -31,7 +31,7 @@ class File_Handler_Directory
 
 	protected function __construct($path, array &$config, File_Area $area, $content = array())
 	{
-		$this->path	= rtrim($path, '\\/').DS;
+		$this->path	= rtrim((string) $path, '\\/').DS;
 		$this->area	= $area;
 
 		foreach ($content as $key => $value)

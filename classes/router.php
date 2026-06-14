@@ -108,14 +108,14 @@ class Router
 			// get named parameters regex's out of the way first
 			foreach($named_params as $name => $value)
 			{
-				if (is_string($name) and ($pos = strpos($url, '(:'.$name.')')) !== false)
+				if (is_string($name) and ($pos = strpos((string) $url, '(:'.$name.')')) !== false)
 				{
 					$url = substr_replace($url, $value, $pos, strlen($name)+3);
 				}
 			}
 
 			// deal with regex's groups
-			if (preg_match_all('#\((?:\?P<(\w+?)>)?.*?\)#', $url, $matches) !== false)
+			if (preg_match_all('#\((?:\?P<(\w+?)>)?.*?\)#', (string) $url, $matches) !== false)
 			{
 				if (count($matches) == 2)
 				{
@@ -130,7 +130,7 @@ class Router
 							$replace = $named_params[$key];
 						}
 
-						if (($pos = strpos($url, $target)) !== false)
+						if (($pos = strpos((string) $url, $target)) !== false)
 						{
 							$url = substr_replace($url, $replace, $pos, strlen($target));
 						}
@@ -184,14 +184,14 @@ class Router
 			{
 				if ($case_sensitive)
 				{
-					if (preg_match('#^'.$path.'$#uD', $name))
+					if (preg_match('#^'.$path.'$#uD', (string) $name))
 					{
 						unset(static::$routes[$name]);
 					}
 				}
 				else
 				{
-					if (preg_match('#^'.$path.'$#uiD', $name))
+					if (preg_match('#^'.$path.'$#uiD', (string) $name))
 					{
 						unset(static::$routes[$name]);
 					}
@@ -228,7 +228,7 @@ class Router
 		if ( ! $match)
 		{
 			// Since we didn't find a match, we will create a new route.
-			$match = new \Route(preg_quote($request->uri->get(), '#'), $request->uri->get());
+			$match = new \Route(preg_quote((string) $request->uri->get(), '#'), $request->uri->get());
 			$match->parse($request);
 		}
 
@@ -329,7 +329,7 @@ class Router
 		// Fall back for default module controllers
 		if ($module)
 		{
-			$class = $namespace.$prefix.ucfirst($module);
+			$class = $namespace.$prefix.ucfirst((string) $module);
 			if (static::check_class($class))
 			{
 				return array(

@@ -183,7 +183,7 @@ class Inflector
 		{
 			if (preg_match($rule, $result))
 			{
-				$result = preg_replace($rule, $replacement, $result);
+				$result = preg_replace($rule, (string) $replacement, $result);
 				break;
 			}
 		}
@@ -210,7 +210,7 @@ class Inflector
 		{
 			if (preg_match($rule, $result))
 			{
-				$result = preg_replace($rule, $replacement, $result);
+				$result = preg_replace($rule, (string) $replacement, $result);
 				break;
 			}
 		}
@@ -245,7 +245,7 @@ class Inflector
 	 */
 	public static function underscore($camel_cased_word)
 	{
-		return \Str::lower(preg_replace('/([A-Z]+)([A-Z])/', '\1_\2', preg_replace('/([a-z\d])([A-Z])/', '\1_\2', strval($camel_cased_word))));
+		return \Str::lower(preg_replace('/([A-Z]+)([A-Z])/', '\1_\2', (string) preg_replace('/([a-z\d])([A-Z])/', '\1_\2', strval($camel_cased_word))));
 	}
 
 	/**
@@ -266,7 +266,7 @@ class Inflector
 
 		if ( ! $allow_non_ascii)
 		{
-			return preg_replace('/[^\x09\x0A\x0D\x20-\x7E]/', '', $str);
+			return preg_replace('/[^\x09\x0A\x0D\x20-\x7E]/', '', (string) $str);
 		}
 
 		return $str;
@@ -305,16 +305,16 @@ class Inflector
 		}
 
 		// Remove all quotes
-		$str = preg_replace("#[\"\']#", '', $str);
+		$str = preg_replace("#[\"\']#", '', (string) $str);
 
 		// Replace apostrophes by separators
-		$str = preg_replace("#[\’]#", '-', $str);
+		$str = preg_replace("#[\’]#", '-', (string) $str);
 
 		// Replace repeating characters
-		$str = preg_replace("#[/_|+ -]+#u", $sep, $str);
+		$str = preg_replace("#[/_|+ -]+#u", $sep, (string) $str);
 
 		// Remove separators from both ends
-		$str = trim($str, $sep);
+		$str = trim((string) $str, $sep);
 
 		// And convert to lowercase if needed
 		if ($lowercase === true)

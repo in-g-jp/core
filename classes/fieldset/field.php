@@ -411,12 +411,12 @@ class Fieldset_Field
 			$output = array();
 			foreach ($key as $k)
 			{
-				$output[$k] = array_key_exists($k, $this->attributes) ? $this->attributes[$k] : $default;
+				$output[$k] = array_key_exists((string) $k, $this->attributes) ? $this->attributes[$k] : $default;
 			}
 			return $output;
 		}
 
-		return array_key_exists($key, $this->attributes) ? $this->attributes[$key] : $default;
+		return array_key_exists((string) $key, $this->attributes) ? $this->attributes[$key] : $default;
 	}
 
 	/**
@@ -659,7 +659,7 @@ class Fieldset_Field
 		{
 			$label = $this->label ? str_replace('{label}', $this->label, $form->get_config('group_label', '<span>{label}</span>')) : '';
 			$template = $this->template ?: $form->get_config('multi_field_template', "\t\t<tr>\n\t\t\t<td class=\"{error_class}\">{group_label}{required}</td>\n\t\t\t<td class=\"{error_class}\">{fields}\n\t\t\t\t{field} {label}<br />\n{fields}\t\t\t{error_msg}\n\t\t\t</td>\n\t\t</tr>\n");
-			if ($template && preg_match('#\{fields\}(.*)\{fields\}#Dus', $template, $match) > 0)
+			if ($template && preg_match('#\{fields\}(.*)\{fields\}#Dus', (string) $template, $match) > 0)
 			{
 				$build_fields = '';
 				foreach ($build_field as $lbl => $bf)

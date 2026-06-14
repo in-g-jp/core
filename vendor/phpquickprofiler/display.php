@@ -522,7 +522,7 @@ else {
 				foreach($query['explain'] as $qe)
 				{
 					isset($qe['select_type']) and $return_output .='<br /> &middot; Query: <b>'.$qe['select_type'].'</b>';
-					empty($qe['table']) or $return_output .=' on <b>'.htmlentities($qe['table']).'</b>';
+					empty($qe['table']) or $return_output .=' on <b>'.htmlentities((string) $qe['table']).'</b>';
 					isset($qe['possible_keys']) and $return_output .=' &middot; Possible keys: <b>'.$qe['possible_keys'].'</b>';
 					isset($qe['key']) and $return_output .=' &middot; Key Used: <b>'.$qe['key'].'</b>';
 					isset($qe['type']) and $return_output .=' &middot; Type: <b>'.$qe['type'].'</b>';

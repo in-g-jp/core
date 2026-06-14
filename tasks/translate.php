@@ -182,7 +182,7 @@ class Translate
 		{
 			\Cli::write('Missing Deepl API key (--apikey)', 'red');
 		}
-		elseif ( ! is_uuid(explode(":", $this->apikey)[0]))
+		elseif ( ! is_uuid(explode(":", (string) $this->apikey)[0]))
 		{
 			\Cli::write('Deepl API key must be in UUID format (--apikey)', 'red');
 		}
@@ -404,7 +404,7 @@ HELP;
 		else
 		{
 			// check if this is a path to a framework or package file
-			$is_core = strpos($path, COREPATH) === 0 || strpos($path, PKGPATH) === 0;
+			$is_core = strpos((string) $path, COREPATH) === 0 || strpos((string) $path, PKGPATH) === 0;
 
 			// enumerate the source files
 			if (is_dir($path.DS.$this->source))
@@ -528,7 +528,7 @@ HELP;
 		}
 		else
 		{
-			if ( ! array_key_exists($this->source, $translations))
+			if ( ! array_key_exists((string) $this->source, $translations))
 			{
 				\Cli::write(sprintf('==> Fatal error: given translation array has no entry for source language "%s"', $this->source), 'red');
 				$validated = false;
@@ -539,7 +539,7 @@ HELP;
 				$validated = false;
 			}
 
-			if ( ! array_key_exists($this->target, $translations))
+			if ( ! array_key_exists((string) $this->target, $translations))
 			{
 				\Cli::write(sprintf('==> Fatal error: given translation array has no entry for target language "%s"', $this->target), 'red');
 				$validated = false;
@@ -610,7 +610,7 @@ HELP;
 						$this->write(sprintf('--> target translation file %s is missing its language strings!', $file), 'light_red');
 					}
 					// check first if this exists in the translation
-					elseif ( ! array_key_exists($file, $translations[$this->source]))
+					elseif ( ! array_key_exists((string) $file, $translations[$this->source]))
 					{
 						$this->write(sprintf('--> target translation file %s does not exist as source translation', $file), 'light_yellow');
 
@@ -722,7 +722,7 @@ HELP;
 				if ($lang == $this->source)
 				{
 					// get the original target file
-					$original = array_key_exists($file, $translations[$this->target]) ? $translations[$this->target][$file]['lang'] : array();
+					$original = array_key_exists((string) $file, $translations[$this->target]) ? $translations[$this->target][$file]['lang'] : array();
 
 					// language we're saving
 					$lang = $this->target;
@@ -730,14 +730,14 @@ HELP;
 				elseif ($lang == $this->target)
 				{
 					// get the original source file
-					$original = array_key_exists($file, $translations[$this->source]) ? $translations[$this->source][$file]['lang'] : array();
+					$original = array_key_exists((string) $file, $translations[$this->source]) ? $translations[$this->source][$file]['lang'] : array();
 
 					// language we're saving
 					$lang = $this->source;
 				}
 				else
 				{
-					throw new \OutOfBoundsException(sprintf('Language "%s" is neither source nor target!', strtoupper($lang)));
+					throw new \OutOfBoundsException(sprintf('Language "%s" is neither source nor target!', strtoupper((string) $lang)));
 				}
 
 				// merge the translations in, and save it
@@ -778,7 +778,7 @@ HELP;
 		{
 			\Cli::write(sprintf('Translation for: %s', \Fuel::clean_path($file)), 'light_green');
 			\Cli::write(sprintf('Translation key: %s', str_replace('.', ' => ', $key)), 'white');
-			\Cli::write(sprintf('Original "%s" value: %s', strtoupper($lang), $translation), 'white');
+			\Cli::write(sprintf('Original "%s" value: %s', strtoupper((string) $lang), $translation), 'white');
 			$translation = \Cli::prompt(sprintf('Enter translation:', ), $translation);
 		}
 
@@ -817,7 +817,7 @@ HELP;
 		else
 		{
 			// construct a curl object
-			if (str_ends_with($this->apikey, ':fx'))
+			if (str_ends_with((string) $this->apikey, ':fx'))
 			{
 				$curl = $this->curl('POST', 'https://api-free.deepl.com/v2/translate');
 			}
@@ -838,8 +838,8 @@ HELP;
 			// add the payload
 			$curl->set_params(json_encode((object) array(
 				'text' => array($translation),
-				'source_lang' => strtoupper($this->source),
-				'target_lang' => strtoupper($this->target),
+				'source_lang' => strtoupper((string) $this->source),
+				'target_lang' => strtoupper((string) $this->target),
 			), JSON_THROW_ON_ERROR|JSON_UNESCAPED_UNICODE|JSON_UNESCAPED_SLASHES));
 
 			// and execute it
@@ -881,7 +881,7 @@ HELP;
 
 			$result = array_first($result['translations']);
 
-			if ( ! array_key_exists('detected_source_language', $result) or $result['detected_source_language'] != strtoupper($this->source))
+			if ( ! array_key_exists('detected_source_language', $result) or $result['detected_source_language'] != strtoupper((string) $this->source))
 			{
 				$this->write('No or incorrect source language in the Deepl response', 'red');
 				var_dump($result);
@@ -890,7 +890,7 @@ HELP;
 
 			\Cli::write(sprintf('Translation for: %s', \Fuel::clean_path($file)), 'light_green');
 			\Cli::write(sprintf('Translation key: %s', str_replace('.', ' => ', $key)), 'white');
-			\Cli::write(sprintf('Original "%s" value: %s', strtoupper($lang), $translation), 'white');
+			\Cli::write(sprintf('Original "%s" value: %s', strtoupper((string) $lang), $translation), 'white');
 			\Cli::write(sprintf('Translated to: %s', $result['text']), 'white');
 
 			// store the translation

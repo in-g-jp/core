@@ -143,7 +143,7 @@ if ( ! function_exists('html_tag'))
 		$html .= ( ! empty($attr)) ? ' '.(is_array($attr) ? array_to_attr($attr) : $attr) : '';
 
 		// a void element?
-		if (in_array(strtolower($tag), $void_elements))
+		if (in_array(strtolower((string) $tag), $void_elements))
 		{
 			// these can not have content
 			$html .= ' />';
@@ -169,7 +169,7 @@ if ( ! function_exists('in_arrayi'))
 {
 	function in_arrayi($needle, $haystack)
 	{
-		return in_array(strtolower($needle), array_map('strtolower', $haystack));
+		return in_array(strtolower((string) $needle), array_map('strtolower', $haystack));
 	}
 }
 
@@ -289,7 +289,7 @@ if (!function_exists('http_build_url'))
 		}
 
 		// parse the original URL
-		$parse_url = is_array($url) ? $url : parse_url($url);
+		$parse_url = is_array($url) ? $url : parse_url((string) $url);
 
 		// make sure we always have a scheme, host and path
 		empty($parse_url['scheme']) and $parse_url['scheme'] = 'http';
@@ -297,7 +297,7 @@ if (!function_exists('http_build_url'))
 		isset($parse_url['path']) or $parse_url['path'] = '';
 
 		// make the path absolute if needed
-		if ( ! empty($parse_url['path']) and substr($parse_url['path'], 0, 1) != '/')
+		if ( ! empty($parse_url['path']) and substr((string) $parse_url['path'], 0, 1) != '/')
 		{
 			$parse_url['path'] = '/'.$parse_url['path'];
 		}
@@ -373,13 +373,13 @@ if ( ! function_exists('get_common_path'))
 		$common = '/';
 		if ( ! empty($paths[0]))
 		{
-			while (($index = strpos($paths[0], '/', $lastOffset)) !== false)
+			while (($index = strpos((string) $paths[0], '/', $lastOffset)) !== false)
 			{
 				$dirLen = $index - $lastOffset + 1;	// include /
-				$dir = substr($paths[0], $lastOffset, $dirLen);
+				$dir = substr((string) $paths[0], $lastOffset, $dirLen);
 				foreach ($paths as $path)
 				{
-					if (substr($path, $lastOffset, $dirLen) != $dir)
+					if (substr((string) $path, $lastOffset, $dirLen) != $dir)
 					{
 						return $common;
 					}
@@ -531,7 +531,7 @@ if ( ! function_exists('hash_pbkdf2'))
 	 */
 	function hash_pbkdf2($a, $p, $s, $c, $kl = 0, $r = false)
 	{
-		$hl = strlen(hash($a, null, true)); # Hash length
+		$hl = strlen(hash((string) $a, '', true)); # Hash length
 		$kb = ceil($kl / $hl);              # Key blocks to compute
 		$dk = '';                           # Derived key
 
@@ -539,13 +539,13 @@ if ( ! function_exists('hash_pbkdf2'))
 		for ( $block = 1; $block <= $kb; $block ++ )
 		{
 			# Initial hash for this block
-			$ib = $b = hash_hmac($a, $s . pack('N', $block), $p, true);
+			$ib = $b = hash_hmac((string) $a, $s . pack('N', $block), (string) $p, true);
 
 			# Perform block iterations
 			for ( $i = 1; $i < $c; $i ++ )
 			{
 				# XOR each iterate
-				$ib ^= ($b = hash_hmac($a, $b, $p, true));
+				$ib ^= ($b = hash_hmac((string) $a, $b, (string) $p, true));
 			}
 			$dk .= $ib; # Append iterated block
 		}

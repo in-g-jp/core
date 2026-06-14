@@ -260,7 +260,7 @@ class Str
 
 			foreach ($array as $from => $to)
 			{
-				substr($from, 0, 1) !== ':' and $from = ':'.$from;
+				substr((string) $from, 0, 1) !== ':' and $from = ':'.$from;
 				$tr_arr[$from] = $to;
 			}
 			unset($array);
@@ -367,8 +367,8 @@ class Str
 		$encoding or $encoding = \Fuel::$encoding;
 
 		return (MBSTRING and $encoding)
-			? mb_strpos($haystack, $needle, $offset, $encoding)
-			: strpos($haystack, $needle, $offset);
+			? mb_strpos($haystack, (string) $needle, $offset, $encoding)
+			: strpos($haystack, (string) $needle, $offset);
 	}
 
 	/**
@@ -387,8 +387,8 @@ class Str
 		$encoding or $encoding = \Fuel::$encoding;
 
 		return (MBSTRING and $encoding)
-			? mb_strrpos($haystack, $needle, $offset, $encoding)
-			: strrpos($haystack, $needle, $offset);
+			? mb_strrpos($haystack, (string) $needle, $offset, $encoding)
+			: strrpos($haystack, (string) $needle, $offset);
 	}
 
 	/*
@@ -410,12 +410,12 @@ class Str
 
 		// substr functions don't parse null correctly if the string is multibyte
 		$length = is_null($length)
-			? (MBSTRING ? mb_strlen($str, $encoding)
-			: strlen($str)) - $start : $length;
+			? (MBSTRING ? mb_strlen((string) $str, $encoding)
+			: strlen((string) $str)) - $start : $length;
 
 		return (MBSTRING and $encoding)
-			? mb_substr($str, $start, $length, $encoding)
-			: substr($str, $start, $length);
+			? mb_substr((string) $str, $start, $length, $encoding)
+			: substr((string) $str, $start, $length);
 	}
 
 	/**
@@ -470,8 +470,8 @@ class Str
 		$encoding or $encoding = \Fuel::$encoding;
 
 		return (MBSTRING and $encoding)
-			? mb_stripos($haystack, $needle, $offset, $encoding)
-			: stripos($haystack, $needle, $offset);
+			? mb_stripos($haystack, (string) $needle, $offset, $encoding)
+			: stripos($haystack, (string) $needle, $offset);
 	}
 
 	/**
@@ -490,8 +490,8 @@ class Str
 		$encoding or $encoding = \Fuel::$encoding;
 
 		return (MBSTRING and $encoding)
-			? mb_strripos($haystack, $needle, $offset, $encoding)
-			: strripos($haystack, $needle, $offset);
+			? mb_strripos($haystack, (string) $needle, $offset, $encoding)
+			: strripos($haystack, (string) $needle, $offset);
 	}
 
 	/**
@@ -509,8 +509,8 @@ class Str
 		$encoding or $encoding = \Fuel::$encoding;
 
 		return (MBSTRING and $encoding)
-			? mb_strstr($haystack, $needle, $before_needle, $encoding)
-			: strstr($haystack, $needle, $before_needle);
+			? mb_strstr($haystack, (string) $needle, $before_needle, $encoding)
+			: strstr($haystack, (string) $needle, $before_needle);
 	}
 
 	/**
@@ -528,8 +528,8 @@ class Str
 		$encoding or $encoding = \Fuel::$encoding;
 
 		return (MBSTRING and $encoding)
-			? mb_stristr($haystack, $needle, $before_needle, $encoding)
-			: stristr($haystack, $needle, $before_needle);
+			? mb_stristr($haystack, (string) $needle, $before_needle, $encoding)
+			: stristr($haystack, (string) $needle, $before_needle);
 	}
 
 	/**
@@ -547,8 +547,8 @@ class Str
 		$encoding or $encoding = \Fuel::$encoding;
 
 		return (MBSTRING and $encoding)
-			? mb_strrchr($haystack, $needle, $part, $encoding)
-			: strrchr($haystack, $needle, $part);
+			? mb_strrchr($haystack, (string) $needle, $part, $encoding)
+			: strrchr($haystack, (string) $needle, $part);
 	}
 
 	/**
@@ -566,8 +566,8 @@ class Str
 		$encoding or $encoding = \Fuel::$encoding;
 
 		return (MBSTRING and $encoding)
-			? mb_substr_count($haystack, $needle, $offset, $encoding)
-			: substr_count($haystack, $needle, $offset);
+			? mb_substr_count($haystack, (string) $needle, $offset, $encoding)
+			: substr_count($haystack, (string) $needle, $offset);
 	}
 
 	/**

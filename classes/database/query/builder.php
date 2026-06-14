@@ -102,7 +102,7 @@ abstract class Database_Query_Builder extends \Database_Query
 						}
 
 						// Database operators are always uppercase
-						$op = strtoupper($op);
+						$op = strtoupper((string) $op);
 
 						if (($op === 'BETWEEN' OR $op === 'NOT BETWEEN') AND is_array($value))
 						{

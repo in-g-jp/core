@@ -269,7 +269,7 @@ class Fuel
 					{
 						$content = 'return '.var_export(\Profiler::output(true), true);
 					}
-					fwrite($handle, $content);
+					fwrite($handle, (string) $content);
 					fclose($handle);
 				}
 			}
@@ -434,8 +434,8 @@ class Fuel
 			{
 				if ($s != '/' and is_dir($s))
 				{
-					$search[] = rtrim($s, DS).DS;
-					$replace[] = rtrim($r, DS).DS;
+					$search[] = rtrim((string) $s, DS).DS;
+					$replace[] = rtrim((string) $r, DS).DS;
 				}
 			}
 		}

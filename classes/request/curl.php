@@ -146,7 +146,7 @@ class Request_Curl extends \Request_Driver
 		if ( ! empty($this->method))
 		{
 			$this->options[CURLOPT_CUSTOMREQUEST] = $this->method;
-			$this->{'method_'.strtolower($this->method)}();
+			$this->{'method_'.strtolower((string) $this->method)}();
 		}
 		else
 		{

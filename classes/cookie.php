@@ -104,12 +104,12 @@ class Cookie
 
 		if (is_null($same_site))
 		{
-		    return setcookie($name, $value, $expiration, $path, $domain, $secure, $http_only);
+		    return setcookie($name, $value, $expiration, (string) $path, (string) $domain, $secure, $http_only);
 		}
 
 		if (PHP_VERSION_ID < 70300)
 		{
-		    return setcookie($name, $value, $expiration, "{$path}; samesite={$same_site}", $domain, $secure, $http_only);
+		    return setcookie($name, $value, $expiration, "{$path}; samesite={$same_site}", (string) $domain, $secure, $http_only);
 		}
 
 		return setcookie($name, $value, array(
@@ -158,7 +158,7 @@ class Cookie
 		// Nullify the cookie and make it expire
 		if (PHP_VERSION_ID < 70300)
 		{
-		    return setcookie($name, "", -86400, "{$path}; samesite={$same_site}", $domain, $secure, $http_only);
+		    return setcookie($name, "", -86400, "{$path}; samesite={$same_site}", (string) $domain, $secure, $http_only);
 		}
 
 		return setcookie($name, "", array('expires' => -86400, 'path' => $path, 'domain' => $domain, 'samesite' => $same_site, 'secure' => $secure,'httponly' => $http_only));

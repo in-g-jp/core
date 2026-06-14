@@ -344,7 +344,7 @@ abstract class Controller_Rest extends \Controller
 				$pattern = '/^' . str_replace($find, $replace, preg_quote($pattern)) . '$/';
 				foreach ($this->_supported_formats as $format => $mime)
 				{
-					if (preg_match($pattern, $mime))
+					if (preg_match($pattern, (string) $mime))
 					{
 						return $format;
 					}
@@ -408,7 +408,7 @@ abstract class Controller_Rest extends \Controller
 
 		$valid_logins = \Config::get('rest.valid_logins');
 
-		if (!array_key_exists($username, $valid_logins))
+		if (!array_key_exists((string) $username, $valid_logins))
 		{
 			return false;
 		}

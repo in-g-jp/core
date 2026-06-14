@@ -251,7 +251,7 @@ class Session_File extends \Session_Driver
 			ftruncate($handle, 0);
 
 			// write the session data
-			fwrite($handle, $payload);
+			fwrite($handle, (string) $payload);
 
 			// flush any pending output
 			fflush($handle);
@@ -288,7 +288,7 @@ class Session_File extends \Session_Driver
 		$file = realpath($file);
 
 		// make sure it exists and is in the config path
-		if (is_file($file) and strpos($file, $this->config['path']) === 0)
+		if (is_file($file) and strpos($file, (string) $this->config['path']) === 0)
 		{
 			$handle = fopen($file, 'r');
 			if ($handle)

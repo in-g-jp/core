@@ -124,7 +124,7 @@ class PhpQuickProfiler {
 			{
 				// only implemented for mysql
 				$config = \Config::get('db.'.$query['dbname']);
-				$is_mysql = ($config['type'] == 'mysql' or $config['type'] == 'mysqli' or strpos($config['connection']['dsn'], 'mysql') !== false);
+				$is_mysql = ($config['type'] == 'mysql' or $config['type'] == 'mysqli' or strpos((string) $config['connection']['dsn'], 'mysql') !== false);
 				if ($is_mysql)
 				{
 					$query = $this->attemptToExplainQuery($query);
@@ -155,11 +155,11 @@ class PhpQuickProfiler {
 	----------------------------------------------------------*/
 
 	function attemptToExplainQuery($query) {
-		if (substr($query['sql'],0,6) == 'SELECT')
+		if (substr((string) $query['sql'],0,6) == 'SELECT')
 		{
 			$rs = false;
 			try {
-				$sql = 'EXPLAIN '.html_entity_decode($query['sql'], ENT_QUOTES);
+				$sql = 'EXPLAIN '.html_entity_decode((string) $query['sql'], ENT_QUOTES);
 				$rs = \DB::query($sql, \DB::SELECT)->execute($query['dbname'])->as_array();
 			}
 			catch(Exception $e)

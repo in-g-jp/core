@@ -95,7 +95,7 @@ abstract class Image_Driver
 				{
 					for ($x = count($vars) - 1; $x >= 0; $x--)
 					{
-						$action[$i] = preg_replace('#\$' . $x . '#', $vars[$x], $action[$i]);
+						$action[$i] = preg_replace('#\$' . $x . '#', (string) $vars[$x], (string) $action[$i]);
 					}
 				}
 				call_fuel_func_array(array($this, $func), $action);
@@ -286,18 +286,18 @@ abstract class Image_Driver
 			// See which is the biggest ratio
 			if (function_exists('bcdiv'))
 			{
-				$width_ratio  = bcdiv($width, $sizes->width, 10);
-				$height_ratio = bcdiv($height, $sizes->height, 10);
+				$width_ratio  = bcdiv($width, (string) $sizes->width, 10);
+				$height_ratio = bcdiv($height, (string) $sizes->height, 10);
 				$compare = bccomp($width_ratio, $height_ratio, 10);
 				if ($compare > -1)
 				{
-					$height = ceil((float) bcmul($sizes->height, $height_ratio, 10));
-					$width = ceil((float) bcmul($sizes->width, $height_ratio, 10));
+					$height = ceil((float) bcmul((string) $sizes->height, $height_ratio, 10));
+					$width = ceil((float) bcmul((string) $sizes->width, $height_ratio, 10));
 				}
 				else
 				{
-					$height = ceil((float) bcmul($sizes->height, $width_ratio, 10));
-					$width = ceil((float) bcmul($sizes->width, $width_ratio, 10));
+					$height = ceil((float) bcmul((string) $sizes->height, $width_ratio, 10));
+					$width = ceil((float) bcmul((string) $sizes->width, $width_ratio, 10));
 				}
 			}
 			else
@@ -354,7 +354,7 @@ abstract class Image_Driver
 
 		if (function_exists('bcdiv'))
 		{
-			if (bccomp(bcdiv($sizes->width, $width, 10), bcdiv($sizes->height, $height, 10), 10) < 1)
+			if (bccomp(bcdiv((string) $sizes->width, $width, 10), bcdiv((string) $sizes->height, $height, 10), 10) < 1)
 			{
 				$this->_resize($width, null, true, false);
 			}
@@ -605,7 +605,7 @@ abstract class Image_Driver
 
 		if ($sides != null)
 		{
-			$sides = explode(' ', $sides);
+			$sides = explode(' ', (string) $sides);
 			foreach ($sides as $side)
 			{
 				if ($side == 'tl' or $side == 'tr' or $side == 'bl' or $side == 'br')
@@ -656,7 +656,7 @@ abstract class Image_Driver
 			$filename = $this->image_filename;
 		}
 
-		$directory = dirname($filename);
+		$directory = dirname((string) $filename);
 		if ( ! is_dir($directory))
 		{
 			throw new \OutOfBoundsException("Could not find directory \"$directory\"");
@@ -713,7 +713,7 @@ abstract class Image_Driver
 	 */
 	public function save_pa($append, $prepend = null, $extension = null, $permissions = null)
 	{
-		$filename = substr($this->image_filename, 0, -(strlen($this->image_extension) + 1));
+		$filename = substr((string) $this->image_filename, 0, -(strlen((string) $this->image_extension) + 1));
 		$fullpath = $this->image_directory.'/'.$append.$filename.$prepend.'.'.
 			($extension !== null ? $extension : $this->image_extension);
 		$this->save($fullpath, $permissions);
@@ -836,7 +836,7 @@ abstract class Image_Driver
 
 		foreach ($this->accepted_extensions as $ext)
 		{
-			if (strtolower(substr($filename, strlen($ext) * -1)) == strtolower($ext))
+			if (strtolower(substr($filename, strlen((string) $ext) * -1)) == strtolower((string) $ext))
 			{
 				$writevar and $this->image_extension = $ext;
 				$return = $ext;

@@ -216,11 +216,11 @@ class Pagination
 			$name = 'calculated_page';
 		}
 
-		if (array_key_exists($name, $this->config))
+		if (array_key_exists((string) $name, $this->config))
 		{
 			return $this->config[$name];
 		}
-		elseif (array_key_exists($name, $this->template))
+		elseif (array_key_exists((string) $name, $this->template))
 		{
 			return $this->template[$name];
 		}
@@ -654,11 +654,11 @@ class Pagination
 		{
 			$value = $this->_validate($name, $value);
 
-			if (array_key_exists($name, $this->config))
+			if (array_key_exists((string) $name, $this->config))
 			{
 				$this->config[$name] = $value;
 			}
-			elseif (array_key_exists($name, $this->template))
+			elseif (array_key_exists((string) $name, $this->template))
 			{
 				$this->template[$name] = $value;
 			}

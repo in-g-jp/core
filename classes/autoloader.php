@@ -87,7 +87,7 @@ class Autoloader
 	{
 		foreach ($namespaces as $ns => $path)
 		{
-			$namespaces[$ns] = rtrim($path, DS).DS;
+			$namespaces[$ns] = rtrim((string) $path, DS).DS;
 		}
 
 		if ( ! $prepend)
@@ -263,7 +263,7 @@ class Autoloader
 			{
 				foreach (static::$namespaces as $ns => $path)
 				{
-					$ns = ltrim($ns, '\\');
+					$ns = ltrim((string) $ns, '\\');
 					if (stripos($full_ns, $ns) === 0)
 					{
 						$path .= static::class_to_path(

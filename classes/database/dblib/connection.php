@@ -130,7 +130,7 @@ class Database_Dblib_Connection extends \Database_PDO_Connection
 						case 'enum':
 						case 'set':
 							$column['collation_name'] = $row['Collation'];
-							$column['options'] = explode('\',\'', substr($length, 1, -1));
+							$column['options'] = explode('\',\'', substr((string) $length, 1, -1));
 						break;
 					}
 				break;

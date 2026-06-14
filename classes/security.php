@@ -159,7 +159,7 @@ class Security
 				// assume it's a regex of characters to filter
 				else
 				{
-					$var = preg_replace('#['.$filter.']#ui', '', $var);
+					$var = preg_replace('#['.$filter.']#ui', '', (string) $var);
 				}
 			}
 		}
@@ -197,7 +197,7 @@ class Security
 	{
 		if ( ! is_array($value))
 		{
-			$value = preg_replace('/\x00|<[^>]*>?/', '', strip_tags($value));
+			$value = preg_replace('/\x00|<[^>]*>?/', '', strip_tags((string) $value));
 			$value = str_replace(["'", '"'], ['&#39;', '&#34;'], $value);
 		}
 		else

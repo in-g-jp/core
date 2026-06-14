@@ -182,7 +182,7 @@ class Config
 
 				foreach (static::$itemcache as $key => $value)
 				{
-					if (strpos($key, $name) === 0)
+					if (strpos((string) $key, $name) === 0)
 					{
 						unset(static::$itemcache[$key]);
 					}

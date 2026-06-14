@@ -196,16 +196,16 @@ class Num
 		$fpos = 0;
 		$spos = 0;
 
-		while ((strlen($format) - 1) >= $fpos)
+		while ((strlen((string) $format) - 1) >= $fpos)
 		{
-			if (ctype_alnum(substr($format, $fpos, 1)))
+			if (ctype_alnum(substr((string) $format, $fpos, 1)))
 			{
-				$result .= substr($string, $spos, 1);
+				$result .= substr((string) $string, $spos, 1);
 				$spos++;
 			}
 			else
 			{
-				$result .= substr($format, $fpos, 1);
+				$result .= substr((string) $format, $fpos, 1);
 			}
 
 			$fpos++;
@@ -243,18 +243,18 @@ class Num
 		$fpos = 0;
 		$spos = 0;
 
-		while ((strlen($format) - 1) >= $fpos)
+		while ((strlen((string) $format) - 1) >= $fpos)
 		{
-			if (ctype_alnum(substr($format, $fpos, 1)))
+			if (ctype_alnum(substr((string) $format, $fpos, 1)))
 			{
-				$result .= substr($string, $spos, 1);
+				$result .= substr((string) $string, $spos, 1);
 				$spos++;
 			}
 			else
 			{
-				$result .= substr($format, $fpos, 1);
+				$result .= substr((string) $format, $fpos, 1);
 
-				if (strpos($ignore, substr($format, $fpos, 1)) === false)
+				if (strpos((string) $ignore, substr((string) $format, $fpos, 1)) === false)
 				{
 					++$spos;
 				}
@@ -299,9 +299,9 @@ class Num
 	{
 		$formats = static::$config['formatting']['smart_phone'];
 
-		if(is_array($formats) and isset($formats[strlen($string)]))
+		if(is_array($formats) and isset($formats[strlen((string) $string)]))
 		{
-			return static::format($string, $formats[strlen($string)]);
+			return static::format($string, $formats[strlen((string) $string)]);
 		}
 
 		return $string;

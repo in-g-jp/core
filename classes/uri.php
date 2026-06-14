@@ -157,7 +157,7 @@ class Uri
 		is_null($uri) and $uri = '';
 
 		// If the given uri is not a full URL
-		if( ! preg_match("#^(http|https|ftp)://#i", $uri))
+		if( ! preg_match("#^(http|https|ftp)://#i", (string) $uri))
 		{
 			$url .= \Config::get('base_url');
 
@@ -166,7 +166,7 @@ class Uri
 				$url .= $index_file.'/';
 			}
 		}
-		$url .= ltrim($uri, '/');
+		$url .= ltrim((string) $uri, '/');
 
 		// stick a url suffix onto it if defined and needed
 		if ($url_suffix = \Config::get('url_suffix', false) and substr($url, -1) != '/')
@@ -328,7 +328,7 @@ class Uri
 		is_null($uri) and $uri = \Input::uri();
 
 		// store the uri
-		$this->uri = trim($uri, '/');
+		$this->uri = trim((string) $uri, '/');
 
 		// determine the uri segment list
 		if (empty($this->uri))

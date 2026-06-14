@@ -275,7 +275,7 @@ class Lang
 				foreach (static::$loaded_files as $file => $args)
 				{
 					// reload with exactly the same arguments
-					if (strpos($file, $language.'/') !== 0)
+					if (strpos((string) $file, $language.'/') !== 0)
 					{
 						call_user_func_array('Lang::load', $args);
 					}

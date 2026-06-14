@@ -96,7 +96,7 @@ class File_Area
 			// create specific handler when available
 			if (array_key_exists($info['extension'], $this->file_handlers))
 			{
-				$class = '\\'.ltrim($this->file_handlers[$info['extension']], '\\');
+				$class = '\\'.ltrim((string) $this->file_handlers[$info['extension']], '\\');
 				return $class::forge($path, $config, $this);
 			}
 
@@ -165,7 +165,7 @@ class File_Area
 		}
 
 		// check file extension
-		if ( ! empty(static::$extensions) && array_key_exists($pathinfo['extension'], static::$extensions))
+		if ( ! empty(static::$extensions) && array_key_exists((string) $pathinfo['extension'], static::$extensions))
 		{
 			throw new \FileAccessException('File operation not allowed: disallowed file extension.');
 		}

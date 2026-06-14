@@ -361,7 +361,7 @@ class Migrate
 				return $done;
 			}
 
-			$file = basename($migration['path'], '.php');
+			$file = basename((string) $migration['path'], '.php');
 			$method == 'up' ? static::write_install($name, $type, $file) : static::write_revert($name, $type, $file);
 			$done[] = $file;
 		}
@@ -477,7 +477,7 @@ class Migrate
 		if ( ! is_null($end))
 		{
 			// if we have a prefix, use that
-			($pos = strpos($end, '_')) === false or $end = ltrim(substr($end, 0, $pos), '0');
+			($pos = strpos((string) $end, '_')) === false or $end = ltrim(substr((string) $end, 0, $pos), '0');
 			is_numeric($end) and $end = (int) $end;
 		}
 
@@ -485,7 +485,7 @@ class Migrate
 		foreach ($files as $file)
 		{
 			// get the version for this migration and normalize it
-			$migration = basename($file);
+			$migration = basename((string) $file);
 			($pos = strpos($migration, '_')) === false or $migration = ltrim(substr($migration, 0, $pos), '0');
 			is_numeric($migration) and $migration = (int) $migration;
 
@@ -493,7 +493,7 @@ class Migrate
 			if ((is_null($start) or $migration > $start) and (is_null($end) or $migration <= $end))
 			{
 				// see if it is already installed
-				if ( in_array(basename($file, '.php'), $current))
+				if ( in_array(basename((string) $file, '.php'), $current))
 				{
 					// already installed. store it only if we're going down
 					$direction == 'down' and $migrations[$migration] = array('path' => $file);
@@ -511,7 +511,7 @@ class Migrate
 		foreach ($migrations as $ver => $migration)
 		{
 			// get the migration filename from the path
-			$migration['file'] = basename($migration['path']);
+			$migration['file'] = basename((string) $migration['path']);
 
 			// make sure the migration filename has a valid format
 			if (preg_match('/^.*?_(.*).php$/', $migration['file'], $match))
@@ -737,7 +737,7 @@ class Migrate
 					// add the individual migrations found
 					foreach ($migrations as $file)
 					{
-						$file = pathinfo($file['path']);
+						$file = pathinfo((string) $file['path']);
 
 						// add this migration to the table
 						\DB::insert(static::$table)->set(array(

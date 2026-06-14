@@ -96,7 +96,7 @@ class Asset_Instance
 		{
 			if (\Str::ends_with($key, '_dir'))
 			{
-				$key = substr($key, 0, -4);
+				$key = substr((string) $key, 0, -4);
 				$this->_path_folders[$key] = $this->_unify_path($value);
 			}
 		}
@@ -120,7 +120,7 @@ class Asset_Instance
 
 		$this->_add_mtime = (bool) $config['add_mtime'];
 		$this->_asset_url = $config['url'];
-		$this->_indent = str_repeat($config['indent_with'], $config['indent_level']);
+		$this->_indent = str_repeat((string) $config['indent_with'], $config['indent_level']);
 		$this->_auto_render = (bool) $config['auto_render'];
 		$this->_fail_silently = (bool) $config['fail_silently'];
 		$this->_always_resolve = (bool) $config['always_resolve'];
@@ -336,7 +336,7 @@ class Asset_Instance
 	{
 		if ($file = $this->find_file($file, $type, $folder))
 		{
-			strpos($file, DOCROOT) === 0 and $file = substr($file, strlen(DOCROOT));
+			strpos((string) $file, DOCROOT) === 0 and $file = substr((string) $file, strlen(DOCROOT));
 
 			return $this->_asset_url.$file;
 		}
@@ -392,7 +392,7 @@ class Asset_Instance
 			}
 
 			// only do a file search if the asset is not a URL
-			if ( ! preg_match('|^(\w+:)?//|', $filename))
+			if ( ! preg_match('|^(\w+:)?//|', (string) $filename))
 			{
 				// and only if the asset is local to the applications base_url
 				if ($this->_always_resolve or ! preg_match('|^(\w+:)?//|', $this->_asset_url) or strpos($this->_asset_url, \Config::get('base_url')) === 0)

@@ -292,7 +292,7 @@ abstract class Session_Driver
 			$default = array();
 			foreach($this->flash as $key => $value)
 			{
-				$key = substr($key, strpos($key, '::')+2);
+				$key = substr((string) $key, strpos((string) $key, '::')+2);
 				$default[$key] = $value;
 			}
 		}
@@ -645,7 +645,7 @@ abstract class Session_Driver
 			$this->config['encrypt_cookie'] and $payload = \Crypt::encode($payload);
 
 			// make sure it doesn't exceed the cookie size specification
-			if (strlen($payload) > 4000)
+			if (strlen((string) $payload) > 4000)
 			{
 				throw new \FuelException('The session data stored by the application in the cookie exceeds 4Kb. Select a different session storage driver.');
 			}

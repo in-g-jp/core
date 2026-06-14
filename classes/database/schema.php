@@ -501,7 +501,7 @@ abstract class Database_Schema
 		$message = $result->get('Msg_text');
 		$table = $result->get('Table');
 
-		if ($type === 'status' and in_array(strtolower($message), array('ok', 'table is already up to date')))
+		if ($type === 'status' and in_array(strtolower((string) $message), array('ok', 'table is already up to date')))
 		{
 			return true;
 		}
@@ -509,7 +509,7 @@ abstract class Database_Schema
 		// make sure we have a type logger can handle
 		if (in_array($type, array('info', 'warning', 'error')))
 		{
-			$type = strtoupper($type);
+			$type = strtoupper((string) $type);
 		}
 		else
 		{
@@ -540,10 +540,10 @@ abstract class Database_Schema
 
 		$collation or $collation = \Config::get('db.'.$this->_name.'.collation', null);
 
-		if (empty($collation) and ($pos = stripos($charset, '_')) !== false)
+		if (empty($collation) and ($pos = stripos((string) $charset, '_')) !== false)
 		{
 			$collation = $charset;
-			$charset = substr($charset, 0, $pos);
+			$charset = substr((string) $charset, 0, $pos);
 		}
 
 		$charset = ' CHARACTER SET '.$charset;

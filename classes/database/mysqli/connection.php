@@ -522,7 +522,7 @@ class Database_MySQLi_Connection extends \Database_Connection
 						case 'enum':
 						case 'set':
 							$column['collation_name'] = $row['Collation'];
-							$column['options'] = explode('\',\'', substr($length, 1, -1));
+							$column['options'] = explode('\',\'', substr((string) $length, 1, -1));
 						break;
 					}
 				break;

@@ -161,7 +161,7 @@ class Input_Instance
 
 			if ( ! empty($_SERVER['REQUEST_URI']))
 			{
-				$uri = strpos($_SERVER['SCRIPT_NAME'], $_SERVER['REQUEST_URI']) !== 0 ? $_SERVER['REQUEST_URI'] : '';
+				$uri = strpos((string) $_SERVER['SCRIPT_NAME'], (string) $_SERVER['REQUEST_URI']) !== 0 ? $_SERVER['REQUEST_URI'] : '';
 			}
 		}
 
@@ -190,28 +190,28 @@ class Input_Instance
 
 		// Remove the base URL from the URI
 		$base_url = parse_url((string) \Config::get('base_url', ''), PHP_URL_PATH);
-		if ($uri !== '' and $base_url !== '' and strncmp($uri, $base_url, strlen($base_url)) === 0)
+		if ($uri !== '' and $base_url !== '' and strncmp((string) $uri, $base_url, strlen($base_url)) === 0)
 		{
-			$uri = substr($uri, strlen($base_url) - 1);
+			$uri = substr((string) $uri, strlen($base_url) - 1);
 		}
 
 		// If we are using an index file (not mod_rewrite) then remove it
 		$index_file = \Config::get('index_file', false);
-		if ($index_file and strncmp($uri, $index_file, strlen($index_file)) === 0)
+		if ($index_file and strncmp((string) $uri, $index_file, strlen($index_file)) === 0)
 		{
-			$uri = substr($uri, strlen($index_file));
+			$uri = substr((string) $uri, strlen($index_file));
 		}
 
 		// When index.php? is used and the config is set wrong, lets just
 		// be nice and help them out.
-		if ($index_file and strncmp($uri, '?/', 2) === 0)
+		if ($index_file and strncmp((string) $uri, '?/', 2) === 0)
 		{
-			$uri = substr($uri, 1);
+			$uri = substr((string) $uri, 1);
 		}
 
 		// in case of incorrect rewrites, we may need to cleanup and
 		// recreate the QUERY_STRING and $_GET
-		if (strpos($uri, '?') !== false or array_key_exists($uri, $_GET))
+		if (strpos((string) $uri, '?') !== false or array_key_exists((string) $uri, $_GET))
 		{
 			// log this issue
 			\Log::write(\Fuel::L_DEBUG, 'Your rewrite rules are incorrect, change "index.php?/$1 [QSA,L]" to "index.php/$1 [L]"!');
@@ -221,7 +221,7 @@ class Input_Instance
 
 			// lets split the URI up in case it contains a ?.  This would
 			// indicate the server requires 'index.php?'
-			preg_match('#(.*?)\?(.*)#i', $uri, $matches);
+			preg_match('#(.*?)\?(.*)#i', (string) $uri, $matches);
 
 			// If there are matches then lets set everything correctly
 			if ( ! empty($matches))
@@ -241,7 +241,7 @@ class Input_Instance
 		}
 
 		// Deal with any trailing dots
-		$uri = rtrim($uri, '.');
+		$uri = rtrim((string) $uri, '.');
 
 		// Do we have a URI and does it not end on a slash?
 		if ($uri and substr($uri, -1) !== '/')

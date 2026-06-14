@@ -62,7 +62,7 @@ class Crypt
 			$flag = true;
 			foreach(array('crypto_key', 'crypto_iv', 'crypto_hmac') as $key)
 			{
-				if (empty(static::$defaults[$key]) or (strlen(static::$defaults[$key]) % 4) !== 0)
+				if (empty(static::$defaults[$key]) or (strlen((string) static::$defaults[$key]) % 4) !== 0)
 				{
 					$flag = false;
 				}
@@ -492,7 +492,7 @@ class Crypt
 		{
 			$key = static::$defaults['sodium']['cipherkey'];
 		}
-		$key = sodium_hex2bin($key);
+		$key = sodium_hex2bin((string) $key);
 
 		// Generate a nonce and a HKDF salt
 		$nonce = random_bytes(SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
@@ -561,7 +561,7 @@ class Crypt
 		{
 			$key = static::$defaults['sodium']['cipherkey'];
 		}
-		$key = sodium_hex2bin($key);
+		$key = sodium_hex2bin((string) $key);
 
 		// get the base64 decoded message
 		$value = Base64UrlSafe::decode($value);
@@ -587,7 +587,7 @@ class Crypt
 		{
 			// crypto_stream_xor() can be used to encrypt and decrypt
 			/** @var string $plaintext */
-			$message = sodium_crypto_stream_xor($encrypted, $nonce, $enc_key);
+			$message = sodium_crypto_stream_xor((string) $encrypted, (string) $nonce, $enc_key);
 		}
 
 		static::memzero($encrypted);
@@ -645,10 +645,10 @@ class Crypt
 	protected function validate_hmac($value)
 	{
 		// strip the hmac-sha256 hash from the value
-		$hmac = substr($value, strlen($value)-43);
+		$hmac = substr((string) $value, strlen((string) $value)-43);
 
 		// and remove it from the value
-		$value = substr($value, 0, strlen($value)-43);
+		$value = substr((string) $value, 0, strlen((string) $value)-43);
 
 		// only return the value if it wasn't tampered with
 		return (static::secure_compare(static::safe_b64encode($this->legacy_hasher->hash($value)), $hmac)) ? $value : false;

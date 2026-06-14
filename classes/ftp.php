@@ -87,7 +87,7 @@ class Ftp
 		    $config);
 
 		// Prep the hostname
-		$this->_hostname = preg_replace('|.+?://|', '', $config['hostname']);
+		$this->_hostname = preg_replace('|.+?://|', '', (string) $config['hostname']);
 		$this->_username = $config['username'];
 		$this->_password = $config['password'];
 		$this->_timeout  = (int) $config['timeout'];
@@ -461,7 +461,7 @@ class Ftp
 				if ( ! @ftp_delete($this->_conn_id, $item))
 				{
 					// don't recurse into current of parent directory
-					if ( ! preg_match('/\/\.\.|\/\.$/', $item))
+					if ( ! preg_match('/\/\.\.|\/\.$/', (string) $item))
 					{
 						$this->delete_dir($item);
 					}

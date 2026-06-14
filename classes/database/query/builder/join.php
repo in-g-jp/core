@@ -210,7 +210,7 @@ class Database_Query_Builder_Join extends \Database_Query_Builder
 				if ($op)
 				{
 					// Make the operator uppercase and spaced
-					$op = ' '.strtoupper($op);
+					$op = ' '.strtoupper((string) $op);
 				}
 
 				// Quote each of the identifiers used for the condition

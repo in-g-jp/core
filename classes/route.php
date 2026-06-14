@@ -92,7 +92,7 @@ class Route
 	{
 		$this->path = $path;
 		$this->translation = ($translation === null) ? $path : $translation;
-		$this->search = ($translation == stripslashes($path)) ? $path : $this->compile();
+		$this->search = ($translation == stripslashes((string) $path)) ? $path : $this->compile();
 		$this->case_sensitive = ($case_sensitive === null) ? \Config::get('routing.case_sensitive', true) : $case_sensitive;
 		$this->strip_extension = ($strip_extension === null) ? \Config::get('routing.strip_extension', true) : $strip_extension;
 		$this->name = $name;
@@ -198,15 +198,15 @@ class Route
 
 				if ($this->case_sensitive)
 				{
-					$path = preg_replace('#^'.$this->search.'$#uD', $this->translation, $uri);
+					$path = preg_replace('#^'.$this->search.'$#uD', (string) $this->translation, $uri);
 				}
 				else
 				{
-					$path = preg_replace('#^'.$this->search.'$#uiD', $this->translation, $uri);
+					$path = preg_replace('#^'.$this->search.'$#uiD', (string) $this->translation, $uri);
 				}
 			}
 
-			$this->segments = explode('/', trim($path, '/'));
+			$this->segments = explode('/', trim((string) $path, '/'));
 		}
 
 		return $this;
@@ -235,7 +235,7 @@ class Route
 
 				$protocol = isset($r[2]) ? ($r[2] ? 'https' : 'http') : false;
 
-				if (($protocol === false or $protocol == \Input::protocol()) and $method == strtoupper($verb))
+				if (($protocol === false or $protocol == \Input::protocol()) and $method == strtoupper((string) $verb))
 				{
 					$r[1]->search = $route->search;
 					$result = $route->_parse_search($uri, $r[1], $method);
