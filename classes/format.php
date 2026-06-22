@@ -481,6 +481,16 @@ class Format
 		$enclosure = \Config::get('format.csv.enclosure', \Config::get('format.csv.import.enclosure', null));
 		$enclosure === null and $enclosure = '"';
 
+		// PHP 8.0+ requires str_getcsv()'s enclosure to be exactly one character; an
+		// empty string (= "no enclosure") now throws a ValueError. Substitute a NUL
+		// byte (which never occurs in CSV text) so parsing falls back to a plain
+		// delimiter split, matching the old empty-enclosure behaviour.
+		$csv_enclosure = ($enclosure === '') ? "\0" : $enclosure;
+
+		// PHP 8.0+ also requires the escape to be at most one character; a longer
+		// configured value would throw. Old PHP only ever used the first character.
+		$csv_escape = ($escape === '') ? '' : substr((string) $escape, 0, 1);
+
 		if (empty($enclosure))
 		{
 			$rows = preg_split('/(['.$newline.'])/m', trim($string), -1, PREG_SPLIT_NO_EMPTY);
@@ -493,7 +503,11 @@ class Format
 		// Get the headings
 		if ($no_headings !== false)
 		{
-			$headings = str_replace($escape.$enclosure, $enclosure, str_getcsv(array_shift($rows), $delimiter, $enclosure, $escape));
+			$headings = str_getcsv(array_shift($rows), $delimiter, $csv_enclosure, $csv_escape);
+			// only collapse escaped enclosures when an enclosure is actually in use;
+			// with no enclosure, $escape.$enclosure would reduce to the bare escape
+			// character and wrongly strip every occurrence of it from the data.
+			$enclosure === '' or $headings = str_replace($escape.$enclosure, $enclosure, $headings);
 			$headcount = count($headings);
 		}
 
@@ -502,7 +516,8 @@ class Format
 		foreach ($rows as $row)
 		{
 			// process the row
-			$data_fields = str_replace($escape.$enclosure, $enclosure, str_getcsv($incomplete.($incomplete ? $newline : '').$row, $delimiter, $enclosure, $escape));
+			$data_fields = str_getcsv($incomplete.($incomplete ? $newline : '').$row, $delimiter, $csv_enclosure, $csv_escape);
+			$enclosure === '' or $data_fields = str_replace($escape.$enclosure, $enclosure, $data_fields);
 
 			// if we didn't have headers, the first row determines the number of fields
 			if ( ! isset($headcount))

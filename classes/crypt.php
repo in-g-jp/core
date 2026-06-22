@@ -623,13 +623,28 @@ class Crypt
 			$keylength = 128;
 		}
 
+		// Determine the target key size in bytes. An explicit $keylength (in bits) wins;
+		// otherwise round the supplied key up to the nearest valid AES size, mirroring how
+		// pre-3.0 phpseclib auto-sized keys.
 		if ($keylength)
 		{
-			$this->legacy_crypter->setKeyLength($keylength);
+			$keybytes = intdiv($keylength, 8);
 		}
+		else
+		{
+			$len = strlen((string) $key);
+			$keybytes = $len <= 16 ? 16 : ($len <= 24 ? 24 : 32);
+		}
+		$this->legacy_crypter->setKeyLength($keybytes * 8);
 
-		$this->legacy_crypter->setKey($key);
-		$this->legacy_crypter->setIV(static::safe_b64decode($this->config['legacy']['crypto_iv']));
+		// phpseclib 3 strictly requires the key to be exactly the configured size, while
+		// pre-3.0 phpseclib silently truncated longer keys and NUL-padded shorter ones.
+		// Normalise both ways so data encrypted before the phpseclib upgrade still decrypts.
+		$this->legacy_crypter->setKey(substr(str_pad((string) $key, $keybytes, "\0"), 0, $keybytes));
+
+		// Likewise normalise the IV to the cipher block size (always 16 bytes for AES).
+		$iv = static::safe_b64decode($this->config['legacy']['crypto_iv']);
+		$this->legacy_crypter->setIV(substr(str_pad((string) $iv, 16, "\0"), 0, 16));
 
 		$value = static::safe_b64decode($value);
 		if ($value = $this->validate_hmac($value))
