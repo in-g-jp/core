@@ -239,10 +239,10 @@ class Test_Arr extends TestCase
 	 * Tests Arr::get()
 	 *
 	 * @test
-	 * @expectedException InvalidArgumentException
 	 */
 	public function test_get_throws_exception_when_array_is_not_an_array()
 	{
+		$this->expectException(\InvalidArgumentException::class);
 		$output = Arr::get('Jack', 'name', 'Unknown Name');
 	}
 
@@ -563,10 +563,10 @@ class Test_Arr extends TestCase
 	 * Tests Arr::sort()
 	 *
 	 * @test
-	 * @expectedException InvalidArgumentException
 	 */
 	public function test_sort_of_non_array()
 	{
+		$this->expectException(\InvalidArgumentException::class);
 		$sorted = Arr::sort('not an array', 'foo.key');
 	}
 
@@ -655,10 +655,10 @@ class Test_Arr extends TestCase
 	 *
 	 * @test
 	 * @dataProvider sort_provider
-	 * @expectedException InvalidArgumentException
 	 */
 	public function test_sort_invalid_direction($data, $expected)
 	{
+		$this->expectException(\InvalidArgumentException::class);
 		$this->assertEquals($expected, Arr::sort($data, 'info.pet.type', 'downer'));
 	}
 
@@ -709,10 +709,10 @@ class Test_Arr extends TestCase
 	 * Tests Arr::to_assoc()
 	 *
 	 * @test
-	 * @expectedException BadMethodCallException
 	 */
 	public function test_to_assoc_with_odd_number_of_elements()
 	{
+		$this->expectException(\BadMethodCallException::class);
 		$arr = array('foo', 'bar', 'baz');
 		Arr::to_assoc($arr);
 	}

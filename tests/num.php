@@ -37,10 +37,10 @@ class Test_Num extends TestCase
 
 	/**
 	 * @see     Num::bytes
-	 * @expectedException Exception
 	 */
 	public function test_bytes_exception()
 	{
+		$this->expectException(\Exception::class);
 		$output = Num::bytes('invalid');
 	}
 
