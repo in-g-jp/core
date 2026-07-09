@@ -963,41 +963,32 @@ class Model_Crud extends \Model implements \Iterator, \ArrayAccess, \Serializabl
 	 *
 	 * @return  array  model data
 	 */
-	#[\ReturnTypeWillChange]
-	public function __serialize()/*: array*/
-	{
-		return $this->serialize();
-	}
-
-	public function serialize()
+	public function __serialize(): array
 	{
 		$data = $this->_data;
 
 		$data['_is_new'] = $this->_is_new;
 		$data['_is_frozen'] = $this->_is_frozen;
 
-		return serialize($data);
+		return $data;
+	}
+
+	public function serialize()
+	{
+		return serialize($this->__serialize());
 	}
 
 	/**
 	 * Serializable implementation: unserialize
 	 *
-	 * @param   string  $data
-	 * @return  array   model data
+	 * @param   array  $data
+	 * @return  void
 	 */
-	#[\ReturnTypeWillChange]
-	public function __unserialize(/* array*/ $data)/*: void*/
+	public function __unserialize(array $data): void
 	{
-		$this->unserialize($data);
-	}
-
-	public function unserialize($data)
-	{
-		$data = unserialize($data);
-
 		if (isset($data['_is_new']))
 		{
-			$this->is_new = $data['_is_new'];
+			$this->_is_new = $data['_is_new'];
 			unset($data['_is_new']);
 		}
 		else
@@ -1016,5 +1007,10 @@ class Model_Crud extends \Model implements \Iterator, \ArrayAccess, \Serializabl
 		}
 
 		$this->_data = $data;
+	}
+
+	public function unserialize($data)
+	{
+		$this->__unserialize(unserialize($data));
 	}
 }
